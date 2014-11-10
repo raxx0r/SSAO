@@ -7,13 +7,14 @@ CFLAGS = -c -Wall `pkg-config --cflags glfw3`
 LDFLAGS = `pkg-config --libs glfw3` -framework OpenGL -framework Cocoa 
 
 
-_OBJS = main.o test.o
+_OBJS = main.o test.o ShaderProgram.o Shader.o
+
 
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
 
 $(ODIR)/%.o: $(SDIR)/%.cpp 
-	$(CC) -c $(INC) -o $@ $< $(CFLAGS) 
+	$(CC) -c -Wall $(INC) -o $@ $< $(CFLAGS) 
 
 $(OUT): $(OBJS) 
 	$(CC) $(OBJS) -o $(OUT) $(LDFLAGS)
