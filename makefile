@@ -1,18 +1,24 @@
+OUT = bin/main
 CC = g++
-SRCDIR = src/
-LFLAGS = -framework OpenGL -framework Cocoa 
-INCLUDES = -I include/ 
-CFLAGS = -w 
-TARGET = main
+ODIR = build
+SDIR = src
+INC = -Iinclude
+CFLAGS = -c -Wall `pkg-config --cflags glfw3`
+LDFLAGS = `pkg-config --libs glfw3` -framework OpenGL -framework Cocoa 
 
-all : $(TARGET)
 
-$(TARGET) : $(TARGET).cpp
-	$(CC) $(TARGET).cpp $(SRCDIR)*.cpp $(LFLAGS) $(CFLAGS) $(INCLUDES) -o bin/$(TARGET)
+_OBJS = main.o test.o
 
-objects: 
-	g++ -c src/*.cpp
+OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
+
+
+$(ODIR)/%.o: $(SDIR)/%.cpp 
+	$(CC) -c $(INC) -o $@ $< $(CFLAGS) 
+
+$(OUT): $(OBJS) 
+	$(CC) $(OBJS) -o $(OUT) $(LDFLAGS)
+
+.PHONY: clean
 
 clean:
-	rm bin/$(TARGET)
-
+	rm -f $(ODIR)/*.o $(OUT)
