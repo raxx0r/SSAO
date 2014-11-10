@@ -1,4 +1,4 @@
-#include <stdio.h> 
+#include <iostream>
 #include "Test.h"
 #include <GLFW/glfw3.h>
 
