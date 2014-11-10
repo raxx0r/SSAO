@@ -7,7 +7,7 @@ CFLAGS = -c -Wall `pkg-config --cflags glfw3`
 LDFLAGS = `pkg-config --libs glfw3` -framework OpenGL -framework Cocoa 
 
 
-_OBJS = main.o test.o ShaderProgram.o Shader.o
+_OBJS = main.o test.o ShaderProgram.o Shader.o Renderer.o
 
 
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
