@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+#include <stdio.h>
 
 void hello() {
 	printf("Hello from function\n");
