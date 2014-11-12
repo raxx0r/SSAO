@@ -6,7 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Renderer::Renderer() {
-
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 }
 
 // Attach two shaders and links them together, returns a pointer to the program.
@@ -29,9 +30,6 @@ void Renderer::initBuffers() {
         -0.5f, -0.5f 
     };
 
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -40,6 +38,10 @@ void Renderer::initBuffers() {
     GLint posAttrib = shaderProgram->getAttribLoc("position");
     glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(posAttrib);
+}
+
+void Renderer::useProgram(ShaderProgram* program) {
+    program->use();
 }
 
 void Renderer::initUniforms() {
@@ -55,7 +57,6 @@ void Renderer::initUniforms() {
 
     GLuint mvpLoc = shaderProgram->getUniformLoc("MVP");
     glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
-
 }
    
 Renderer::~Renderer() {

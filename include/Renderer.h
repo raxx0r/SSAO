@@ -11,6 +11,7 @@ public:
 	Renderer();
 	void initBuffers();
 	void initUniforms();
+	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
     virtual ~Renderer();
     

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Renderer.h"
+#include "ModelImporter.h"
 
 int main(void)
 {
@@ -32,9 +33,9 @@ int main(void)
     // Initalize renderer.
     Renderer* renderer = new Renderer();
 
-    // Setup a shader program and make it the current.
+    // Create shader program with the two current shaders and make it the current program.
     ShaderProgram* phongProgram = renderer->buildShaderProgram(phongVert, phongFrag);
-    phongProgram->use();
+    renderer->useProgram(phongProgram);
 
     // Setup VAO, VBO and Uniforms.
     renderer->initBuffers();
