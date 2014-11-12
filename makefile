@@ -4,13 +4,18 @@ ODIR = build
 SDIR = src
 INC = -Iinclude
 CFLAGS = -c -Wall 
+
+OS_NAME := $(shell uname -s)
+
+ifeq ($(OS_NAME), Linux)
+LDFLAGS = bajs
+else
 LDFLAGS = `pkg-config --libs glfw3` -framework OpenGL -framework Cocoa \
 		  `pkg-config --libs assimp` 
-
+endif
 
 _OBJS = main.o ShaderProgram.o Shader.o Renderer.o ModelImporter.o \
 		Window.o
-
 
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
