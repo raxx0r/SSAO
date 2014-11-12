@@ -20,6 +20,9 @@ int main(void)
     ShaderProgram* phongProgram = renderer->buildShaderProgram(phongVert, phongFrag);
     renderer->useProgram(phongProgram);
 
+    ModelImporter* importer = new ModelImporter();
+    importer->importModel("models/sphere.obj");
+
     // Setup VAO, VBO and Uniforms.
     renderer->initBuffers();
     renderer->initUniforms();
