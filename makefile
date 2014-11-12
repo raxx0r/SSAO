@@ -8,7 +8,8 @@ CFLAGS = -c -Wall
 OS_NAME := $(shell uname -s)
 
 ifeq ($(OS_NAME), Linux)
-LDFLAGS = bajs
+LDFLAGS = `pkg-config --libs glfw3` -lGL -lGLU -lX11 -lXxf86vm -lpthread\
+		  -lXrandr -lXi `pkg-config --libs assimp`
 else
 LDFLAGS = `pkg-config --libs glfw3` -framework OpenGL -framework Cocoa \
 		  `pkg-config --libs assimp` 
