@@ -22,7 +22,7 @@ void Renderer::initBuffers(Model m) {
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2280, m.vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * m.numVerts, m.vertices, GL_STATIC_DRAW);
 
     // TODO: should be moved to another function.
     GLint posAttrib = shaderProgram->getAttribLoc("position");
@@ -39,9 +39,9 @@ void Renderer::initUniforms() {
 	float aspect = (float) 640 / 480;
 
     // Init matrices
-    M = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
-    V = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -20.0f));
-    P = glm::perspective(60.0f, aspect, 0.1f, 100.0f);
+    M = glm::scale(glm::mat4(), glm::vec3(0.25f, 0.25f, 0.25f));
+    V = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -30.0f));
+    P = glm::perspective(60.0f, aspect, 0.1f, 200.0f);
 
     // Find GPU locations
     GLuint mLoc = shaderProgram->getUniformLoc("M");

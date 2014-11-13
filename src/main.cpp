@@ -19,16 +19,13 @@ int main(void)
     ShaderProgram* phongProgram = renderer->buildShaderProgram(phongVert, phongFrag);
     renderer->useProgram(phongProgram);
 
+    // Load in model
     ModelImporter* importer = new ModelImporter();
-    Model model = importer->importModel("models/sphere.obj");
-
+    Model model = importer->importModel("models/teapot.obj");
 
     // Setup VAO, VBO and Uniforms.
     renderer->initBuffers(model);
     renderer->initUniforms();
-
-    // renderer->sendVertices(importer->getVertices());
-    
 
     delete phongVert;
     delete phongFrag;
@@ -36,8 +33,15 @@ int main(void)
     while(!window->shouldClose()){
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Rotate object around z-axis.
+        float time = glfwGetTime();
+        renderer->updateModelMatrix(glm::rotate(
+            glm::mat4(), time * 3.0f, glm::vec3(0.0, 0.0, 1.0)
+        ));
+
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
-        glDrawArrays(GL_TRIANGLES, 0, 2280 / 3);
+        glDrawArrays(GL_TRIANGLES, 0, model.numVerts / 3.0);
 
         window->swapBuffers();
     }
@@ -45,7 +49,6 @@ int main(void)
     // Cleanup
     delete window;
     glfwTerminate();
-
 
     return 0;
 }

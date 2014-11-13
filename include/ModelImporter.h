@@ -3,8 +3,8 @@
 
 struct Model{
 	float* vertices;
-	// int verticesSize;
 	float* normals;
+	int numVerts;
 	// int normalsSize;
 
 };
