@@ -1,4 +1,5 @@
 #include "ShaderProgram.h"
+#include "ModelImporter.h"
 
 // GLM includes
 #include <glm/glm.hpp>
@@ -18,7 +19,7 @@ private:
 public:
 	Renderer();
 	void updateModelMatrix(glm::mat4 modelMat);
-	void initBuffers();
+	void initBuffers(Model m);
 	void initUniforms();
 	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
