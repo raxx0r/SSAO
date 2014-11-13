@@ -1,12 +1,20 @@
 #include <string>
 #include <assimp/scene.h>    
 
+struct Model{
+	float* vertices;
+	// int verticesSize;
+	float* normals;
+	// int normalsSize;
+
+};
+
 class ModelImporter {
 
 private:
-	void processObject(const aiScene*);
+	Model processObject(const aiScene*);
     
 public:
 	ModelImporter();
-	bool importModel(const std::string& filePath);
+	Model importModel(const std::string& filePath);
 };

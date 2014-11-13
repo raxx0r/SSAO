@@ -7,7 +7,7 @@ ModelImporter::ModelImporter() {
 
 }
 
-bool ModelImporter::importModel(const std::string& filePath) {
+Model ModelImporter::importModel(const std::string& filePath) {
 
 	// Create an instance of the Importer class
  	Assimp::Importer importer;
@@ -24,39 +24,53 @@ bool ModelImporter::importModel(const std::string& filePath) {
   // If the import failed, report it
   if (!scene) {
     printf("Model import failed! - %s \n", importer.GetErrorString());
-    return false;
+    // return false;
   }
 
   printf("Model import of %s succeded. \n", filePath.c_str());
 
-  processObject(scene);
+ 
 
   // Now we can access the file's contents. 
   // DoTheSceneProcessing( scene);
   // We're done. Everything will be cleaned up by the importer destructor
-  return true;
+  return processObject(scene);
 }
 
 // Processes a scene that only consists of one object (one mesh).
-void ModelImporter::processObject(const aiScene* object) {
+Model ModelImporter::processObject(const aiScene* object) {
 
+  float *vertexArray;
+  float *normalArray;
+
+  int numVerts;
   aiMesh* mesh = object->mMeshes[0];
-  int numVerts = mesh->mNumFaces * 3;
+  numVerts = mesh->mNumFaces*3;
 
-  float* vertices = new float[numVerts * 3];
-  // float* normals = new float[numVerts * 3];
-  // float* uv = new float[numVerts * 2];
+  vertexArray = new float[mesh->mNumFaces*3*3];
+  normalArray = new float[mesh->mNumFaces*3*3];
 
-  for (uint i = 0; i < mesh->mNumFaces; i++) {
+  for(unsigned int i=0;i<mesh->mNumFaces;i++){
     const aiFace& face = mesh->mFaces[i];
-
-    for (uint j = 0; j < 3; j++) {
+     
+    for(int j=0;j<3;j++){
+       
+      aiVector3D normal = mesh->mNormals[face.mIndices[j]];
+      memcpy(normalArray,&normal,sizeof(float)*3);
+      normalArray+=3;
+       
       aiVector3D pos = mesh->mVertices[face.mIndices[j]];
-      memcpy(vertices, &pos, sizeof(float) * 3);
-      vertices += 3;
+      memcpy(vertexArray,&pos,sizeof(float)*3);
+      vertexArray+=3;
     }
   }
 
-  vertices -= numVerts * 3;
-  
+  normalArray-=mesh->mNumFaces*3*3;
+  vertexArray-=mesh->mNumFaces*3*3;
+
+
+  Model model = { vertexArray, normalArray };
+
+
+  return model;
 }
