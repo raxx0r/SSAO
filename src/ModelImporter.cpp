@@ -56,7 +56,5 @@ void ModelImporter::processObject(const aiScene* object) {
       vertices += 3;
     }
   }
-
   vertices -= numVerts * 3;
-  
 }

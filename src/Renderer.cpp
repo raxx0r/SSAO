@@ -1,13 +1,9 @@
 #include "Renderer.h"
 
-// GLM includes
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 Renderer::Renderer() {
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
+    glEnable(GL_DEPTH_TEST);
 }
 
 // Attach two shaders and links them together, returns a pointer to the program.
@@ -24,11 +20,6 @@ ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
 // Init buffers for rendering, it also creates and binds a VAO.
 void Renderer::initBuffers() {
 
-	float vertices[] = {
-         0.0f,  0.5f,
-         0.5f, -0.5f, 
-        -0.5f, -0.5f 
-    };
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -36,7 +27,7 @@ void Renderer::initBuffers() {
 
     // TODO: should be moved to another function.
     GLint posAttrib = shaderProgram->getAttribLoc("position");
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(posAttrib);
 }
 
@@ -48,16 +39,27 @@ void Renderer::initUniforms() {
 
 	float aspect = (float) 640 / 480;
 
-    glm::mat4 projectionMat = glm::perspective(60.0f, aspect, 0.1f, 100.0f);
-    glm::mat4 viewMat = glm::mat4();
-    glm::mat4 modelMat = glm::mat4();
-    modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, -3.0f));
+    // Init matrices
+    M = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
+    V = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -4.0f));
+    P = glm::perspective(60.0f, aspect, 0.1f, 100.0f);
 
-    glm::mat4 MVP = projectionMat * viewMat * modelMat;
+    // Find GPU locations
+    GLuint mLoc = shaderProgram->getUniformLoc("M");
+    GLuint vLoc = shaderProgram->getUniformLoc("V");
+    GLuint pLoc = shaderProgram->getUniformLoc("P");
 
-    GLuint mvpLoc = shaderProgram->getUniformLoc("MVP");
-    glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
+    // Send data to GPU
+    glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(M));
+    glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(V));
+    glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(P));
 }
+
+void Renderer::updateModelMatrix(glm::mat4 modelMat) {
+
+    GLuint mLoc = shaderProgram->getUniformLoc("M");
+    glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
+}   
    
 Renderer::~Renderer() {
 	glDeleteVertexArrays(1, &vao);
