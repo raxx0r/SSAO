@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "Renderer.h"
-#include "ModelImporter.h"
 #include "Window.h"
 
 
@@ -21,11 +20,14 @@ int main(void)
     renderer->useProgram(phongProgram);
 
     ModelImporter* importer = new ModelImporter();
-    importer->importModel("models/sphere.obj");
+    Model model = importer->importModel("models/sphere.obj");
 
     // Setup VAO, VBO and Uniforms.
-    renderer->initBuffers();
+    renderer->initBuffers(model);
     renderer->initUniforms();
+
+    // renderer->sendVertices(importer->getVertices());
+    
 
     delete phongVert;
     delete phongFrag;
@@ -35,6 +37,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
 
         window->swapBuffers();
     }

@@ -1,4 +1,5 @@
 #include "ShaderProgram.h"
+#include "ModelImporter.h"
 
 class Renderer {
 
@@ -9,7 +10,7 @@ private:
     
 public:
 	Renderer();
-	void initBuffers();
+	void initBuffers(Model m);
 	void initUniforms();
 	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
