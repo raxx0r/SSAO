@@ -35,19 +35,9 @@ int main(void)
 
     while(!window->shouldClose()){
 
-        double time = glfwGetTime();
-        glm::mat4 modelMat = glm::rotate(
-            glm::mat4(),
-            (float)time * 1.5f,
-            glm::vec3(0.0, 0.0, 1.0)
-        );
-
-        renderer->updateModelMatrix(modelMat);
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
-        glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
-
+        glDrawArrays(GL_TRIANGLES, 0, 2280 / 3);
 
         window->swapBuffers();
     }
