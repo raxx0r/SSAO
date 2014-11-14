@@ -1,5 +1,6 @@
 #include "ModelImporter.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <assimp/Importer.hpp>             
 #include <assimp/postprocess.h> 
 

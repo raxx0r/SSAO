@@ -4,8 +4,8 @@
 
 Camera::Camera(){
 
-    _position = glm::vec3(0.0, 0.0, 0.0);
-    _rotation = glm::vec3(0.0, 0.0, 0.0);
+    _position = glm::vec3(0.0, 20.0, 50.0);
+    _rotation = glm::vec3(-10.0, 0.0, 0.0);
     _moveSpeed = 20.0;
     _rotateSpeed = 5.0;
 }
