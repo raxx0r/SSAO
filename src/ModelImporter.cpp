@@ -1,5 +1,5 @@
 #include "ModelImporter.h"
-#include <stdlib.h>
+#include <stdio.h>
 #include <assimp/Importer.hpp>             
 #include <assimp/postprocess.h> 
 
@@ -65,10 +65,10 @@ Model ModelImporter::processObject(const aiScene* object) {
             numVerts++;
         }
     }
-
+    
     normalArray-=mesh->mNumFaces*3*3;
     vertexArray-=mesh->mNumFaces*3*3;
 
-    Model model = { vertexArray, normalArray, numVerts};
+    Model model = { vertexArray, normalArray, numVerts };
     return model;
 }
