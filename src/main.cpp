@@ -37,9 +37,9 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Rotate object around z-axis.
-        float time = glfwGetTime();
+        //float time = glfwGetTime();
 
-        M = glm::mat4(); //glm::rotate( glm::mat4(), time * 5.0f, glm::vec3(0.0, 0.0, 1.0) );
+        M = glm::mat4(); 
         V = camera->getMatrix();
 
         renderer->update(M,V);

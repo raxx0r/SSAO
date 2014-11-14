@@ -49,7 +49,7 @@ Model ModelImporter::processObject(const aiScene* object) {
     vertexArray = new float[mesh->mNumFaces*3*3];
     normalArray = new float[mesh->mNumFaces*3*3];
 
-    for (int i = 0; i < mesh->mNumFaces; i++) {
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
 
         const aiFace& face = mesh->mFaces[i];
      

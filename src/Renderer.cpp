@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Utils.h"
 
 Renderer::Renderer() {
     glGenVertexArrays(1, &vao);
@@ -63,12 +64,12 @@ void Renderer::useProgram(ShaderProgram* program) {
 
 void Renderer::initUniforms() {
 
-	float aspect = (float) 640 / 480;
+    float aspect = (float) 640 / 480;
 
     // Init matrices
     M = glm::scale(glm::mat4(), glm::vec3(0.25f, 0.25f, 0.25f));
     V = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -30.0f));
-    P = glm::perspective(60.0f, aspect, 0.1f, 200.0f);
+    P = glm::perspective(Utils::degToRad(60.0f), aspect, 0.1f, 200.0f);
     N = glm::transpose(glm::inverse(glm::mat3(V * M)));
 
     // Find GPU locations
