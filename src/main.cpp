@@ -30,7 +30,7 @@ int main(void)
     delete phongVert;
     delete phongFrag;
 
-    while(!window->shouldClose()){
+    while(!window->isClosed()){
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

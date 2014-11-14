@@ -11,12 +11,12 @@ ifeq ($(OS_NAME), Linux)
 LDFLAGS = `pkg-config --libs glfw3` -lGL -lGLU -lX11 -lXxf86vm -lpthread\
 		  -lXrandr -lXi `pkg-config --libs assimp`
 else
-LDFLAGS = `pkg-config --libs glfw3` -framework OpenGL -framework Cocoa \
+LDFLAGS = `pkg-config --libs glfw3` -lglfw3 -framework OpenGL -framework Cocoa \
 		  `pkg-config --libs assimp` 
 endif
 
 _OBJS = main.o ShaderProgram.o Shader.o Renderer.o ModelImporter.o \
-		Window.o
+		Window.o Camera.o
 
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 

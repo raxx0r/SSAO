@@ -11,6 +11,6 @@ class Window {
 		GLint getFrameBufferWidth();
     	GLint getFrameBufferHeight();
     	GLFWwindow* getWindow();
-   	    bool shouldClose();
+   	    bool isClosed();
 	    void swapBuffers();
 };

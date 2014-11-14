@@ -41,9 +41,10 @@ void Window::swapBuffers(){
 
 }
 
-bool Window::shouldClose(){
+bool Window::isClosed(){
     return glfwWindowShouldClose(window);
 }
+
 
 
 GLint Window::getFrameBufferWidth(){

@@ -9,10 +9,11 @@ struct Model {
 
 class ModelImporter {
 
-private:
-	Model processObject(const aiScene*);
-    
 public:
 	ModelImporter();
 	Model importModel(const std::string& filePath);
+	
+private:
+	Model processObject(const aiScene*);
+    
 };
