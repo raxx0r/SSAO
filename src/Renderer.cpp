@@ -17,14 +17,14 @@ ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
     return shaderProgram;
 }
 
-// Init buffers for rendering, it also creates and binds a VAO.
+// Init buffers for rendering. 
 void Renderer::initBuffers(Model m) {
+
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * m.numVerts, m.vertices, GL_STATIC_DRAW);
 
-    // TODO: should be moved to another function.
     GLint posAttrib = shaderProgram->getAttribLoc("position");
     glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(posAttrib);

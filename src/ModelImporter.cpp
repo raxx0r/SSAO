@@ -55,14 +55,14 @@ Model ModelImporter::processObject(const aiScene* object) {
         for (int j = 0; j < 3; j++) {
 
             aiVector3D normal = mesh->mNormals[face.mIndices[j]];
-            memcpy(normalArray,&normal,sizeof(float)*3);
-            normalArray+=3;
+            memcpy(normalArray, &normal, sizeof(float)*3);
+            normalArray += 3;
        
             aiVector3D pos = mesh->mVertices[face.mIndices[j]];
-            memcpy(vertexArray,&pos,sizeof(float)*3);
+            memcpy(vertexArray, &pos, sizeof(float)*3);
             vertexArray += 3;
 
-            numVerts += 3;
+            numVerts++;
         }
     }
 

@@ -8,7 +8,7 @@ int main(void)
     Window* window;
     window = new Window(640, 480, "Screen Space Ambient Occlusion");
 
-    // Create shaders
+    // Create shaders.
     Shader* phongVert = new Shader("shaders/phong.vert", GL_VERTEX_SHADER);
     Shader* phongFrag = new Shader("shaders/phong.frag", GL_FRAGMENT_SHADER);
 
@@ -19,7 +19,7 @@ int main(void)
     ShaderProgram* phongProgram = renderer->buildShaderProgram(phongVert, phongFrag);
     renderer->useProgram(phongProgram);
 
-    // Load in model
+    // Load in model.
     ModelImporter* importer = new ModelImporter();
     Model model = importer->importModel("models/teapot.obj");
 
@@ -41,7 +41,7 @@ int main(void)
         ));
 
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
-        glDrawArrays(GL_TRIANGLES, 0, model.numVerts / 3.0);
+        glDrawArrays(GL_TRIANGLES, 0, model.numVerts);
 
         window->swapBuffers();
     }

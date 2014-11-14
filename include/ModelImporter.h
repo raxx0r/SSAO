@@ -1,12 +1,10 @@
 #include <string>
 #include <assimp/scene.h>    
 
-struct Model{
+struct Model {
 	float* vertices;
 	float* normals;
 	int numVerts;
-	// int normalsSize;
-
 };
 
 class ModelImporter {
