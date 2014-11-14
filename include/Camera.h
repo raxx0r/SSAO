@@ -7,8 +7,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class Camera {
-
-
 	public:
 	  Camera();
 	  void setPosition(glm::vec3 position);
@@ -17,8 +15,6 @@ class Camera {
 	  void setRotateSpeed(GLfloat rotateSpeed);
 	  void update(Window* window);
 	  glm::mat4 getMatrix();
-
-
 	private:
 	  glm::vec3 _position;
 	  glm::vec3 _rotation;
