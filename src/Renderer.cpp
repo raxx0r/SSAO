@@ -1,9 +1,17 @@
 #include "Renderer.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 Renderer::Renderer() {
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
+
     glEnable(GL_DEPTH_TEST);
+
+    // Don't draw triangles with face away from camera.
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 }
 
 void Renderer::update(glm::mat4 modelMat, glm::mat4 viewMat){ 
@@ -12,14 +20,25 @@ void Renderer::update(glm::mat4 modelMat, glm::mat4 viewMat){
     GLuint mLoc = shaderProgram->getUniformLoc("M");
     GLuint vLoc = shaderProgram->getUniformLoc("V");
     GLuint nLoc = shaderProgram->getUniformLoc("N");
+    GLuint vInvLoc = shaderProgram->getUniformLoc("V_inv");
 
     N = glm::transpose(glm::inverse(glm::mat3(viewMat * modelMat)));
+    vInv = glm::inverse(viewMat);
 
     // Send data to GPU
     glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
+    glUniformMatrix4fv(vInvLoc, 1, GL_FALSE, glm::value_ptr(vInv));
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
 
+}
+
+void Renderer::initLightSource(LightSource* lightSource) {
+    GLuint lightPosLoc = shaderProgram->getUniformLoc("light_pos");
+    GLuint lightColLoc = shaderProgram->getUniformLoc("light_col");
+
+    glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource->color()));
+    glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightSource->position()));
 }
 
 
@@ -28,7 +47,7 @@ ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
 	shaderProgram = new ShaderProgram();
 	shaderProgram->attachShader(vert);
     shaderProgram->attachShader(frag);
-    shaderProgram->bindFragDataLocation(0, "outColor");
+    shaderProgram->bindFragDataLocation(0, "out_color");
     shaderProgram->link();
 
     return shaderProgram;
@@ -42,7 +61,7 @@ void Renderer::initBuffers(Model m) {
 
     // Buffer positions
     glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
-    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * m.numVerts, m.vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(GLfloat) * m.numVerts, m.vertices, GL_STATIC_DRAW);
 
     GLuint posLoc = shaderProgram->getAttribLoc("position");
     glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -50,7 +69,7 @@ void Renderer::initBuffers(Model m) {
 
     // Buffer normals
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
-    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * m.numVerts, m.normals, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(GLfloat) * m.numVerts, m.normals, GL_STATIC_DRAW);
 
     GLuint normLoc = shaderProgram->getAttribLoc("normal");
     glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -66,21 +85,24 @@ void Renderer::initUniforms() {
 	float aspect = (float) 640 / 480;
 
     // Init matrices
-    M = glm::scale(glm::mat4(), glm::vec3(0.25f, 0.25f, 0.25f));
+    M = glm::mat4();
     V = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -30.0f));
     P = glm::perspective(60.0f, aspect, 0.1f, 200.0f);
     N = glm::transpose(glm::inverse(glm::mat3(V * M)));
+    vInv = glm::inverse(V);
 
     // Find GPU locations
     GLuint mLoc = shaderProgram->getUniformLoc("M");
     GLuint vLoc = shaderProgram->getUniformLoc("V");
     GLuint pLoc = shaderProgram->getUniformLoc("P");
     GLuint nLoc = shaderProgram->getUniformLoc("N");
+    GLuint vInvLoc = shaderProgram->getUniformLoc("V_inv");
 
     // Send data to GPU
     glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(M));
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(V));
     glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(P));
+    glUniformMatrix4fv(vInvLoc, 1, GL_FALSE, glm::value_ptr(vInv));
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
 }
 

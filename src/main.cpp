@@ -2,7 +2,6 @@
 #include "Renderer.h"
 #include "Camera.h"
 
-
 int main(void)
 {
     Window* window = new Window(640, 480, "Screen Space Ambient Occlusion");
@@ -31,19 +30,18 @@ int main(void)
     delete phongFrag;
 
     glm::mat4 M, V, P;
+    LightSource* lightSource = new LightSource(glm::vec3(0.0, 20.0, 0.0), glm::vec3(1.0, 0.5f, 0.0));
+    renderer->initLightSource(lightSource);
 
-    while(!window->isClosed()){
+    while(!window->isClosed()) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Rotate object around z-axis.
-        float time = glfwGetTime();
-
-        M = glm::mat4(); //glm::rotate( glm::mat4(), time * 5.0f, glm::vec3(0.0, 0.0, 1.0) );
+        //GLfloat time = glfwGetTime();
+        M = glm::mat4(); //glm::rotate( glm::mat4(), time * 7.0f, glm::vec3(0.0, 1.0, 0.0));
         V = camera->getMatrix();
 
-        renderer->update(M,V);
-
+        renderer->update(M, V);
 
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
         glDrawArrays(GL_TRIANGLES, 0, model.numVerts);
@@ -55,6 +53,8 @@ int main(void)
     // Cleanup
     delete window;
     delete camera;
+    delete lightSource;
+
     glfwTerminate();
 
     return 0;

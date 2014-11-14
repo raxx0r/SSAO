@@ -16,7 +16,7 @@ LDFLAGS = `pkg-config --libs glfw3` -lglfw3 -framework OpenGL -framework Cocoa \
 endif
 
 _OBJS = main.o ShaderProgram.o Shader.o Renderer.o ModelImporter.o \
-		Window.o Camera.o
+		Window.o Camera.o LightSource.o
 
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
