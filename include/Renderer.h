@@ -9,12 +9,26 @@
 class Renderer {
 
 private:
+	enum vboIndices {
+		POSITION_VBO,
+		NORMAL_VBO
+	};
+
 	ShaderProgram* shaderProgram;
 	GLuint vao;
-	GLuint vbo;
+	GLuint vbo[2];
+
+	// Perspective matrix
 	glm::mat4 P;
+
+	// View matrix
 	glm::mat4 V;
+
+	// Model matrix
 	glm::mat4 M;
+
+	// Normal matrix
+	glm::mat3 N;
     
 public:
 	Renderer();
@@ -24,5 +38,4 @@ public:
 	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
     virtual ~Renderer();
-    
 };

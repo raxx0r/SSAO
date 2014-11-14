@@ -37,7 +37,7 @@ int main(void)
         // Rotate object around z-axis.
         float time = glfwGetTime();
         renderer->updateModelMatrix(glm::rotate(
-            glm::mat4(), time * 3.0f, glm::vec3(0.0, 0.0, 1.0)
+            glm::mat4(), time * 5.0f, glm::vec3(0.0, 0.0, 1.0)
         ));
 
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
