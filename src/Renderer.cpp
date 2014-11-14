@@ -6,6 +6,23 @@ Renderer::Renderer() {
     glEnable(GL_DEPTH_TEST);
 }
 
+void Renderer::update(glm::mat4 modelMat, glm::mat4 viewMat){ 
+
+    // Find GPU locations
+    GLuint mLoc = shaderProgram->getUniformLoc("M");
+    GLuint vLoc = shaderProgram->getUniformLoc("V");
+    GLuint nLoc = shaderProgram->getUniformLoc("N");
+
+    N = glm::transpose(glm::inverse(glm::mat3(viewMat * modelMat)));
+
+    // Send data to GPU
+    glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
+    glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
+    glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
+
+}
+
+
 // Attach two shaders and links them together, returns a pointer to the program.
 ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
 	shaderProgram = new ShaderProgram();
@@ -67,18 +84,6 @@ void Renderer::initUniforms() {
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
 }
 
-void Renderer::updateModelMatrix(glm::mat4 modelMat) {
-
-    // TODO: Store locations of uniforms.
-    GLuint mLoc = shaderProgram->getUniformLoc("M");
-    GLuint nLoc = shaderProgram->getUniformLoc("N");
-
-    M = modelMat;
-    N = glm::transpose(glm::inverse(glm::mat3(V * M)));
-
-    glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(M));
-    glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
-}   
    
 Renderer::~Renderer() {
 	glDeleteVertexArrays(1, &vao);

@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include "Renderer.h"
-#include "Window.h"
+#include "Camera.h"
 
 
 int main(void)
 {
-    Window* window;
-    window = new Window(640, 480, "Screen Space Ambient Occlusion");
+    Window* window = new Window(640, 480, "Screen Space Ambient Occlusion");
+    Camera* camera = new Camera();
 
     // Create shaders.
     Shader* phongVert = new Shader("shaders/phong.vert", GL_VERTEX_SHADER);
@@ -30,24 +30,31 @@ int main(void)
     delete phongVert;
     delete phongFrag;
 
-    while(!window->shouldClose()){
+    glm::mat4 M, V, P;
+
+    while(!window->isClosed()){
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Rotate object around z-axis.
         float time = glfwGetTime();
-        renderer->updateModelMatrix(glm::rotate(
-            glm::mat4(), time * 5.0f, glm::vec3(0.0, 0.0, 1.0)
-        ));
+
+        M = glm::mat4(); //glm::rotate( glm::mat4(), time * 5.0f, glm::vec3(0.0, 0.0, 1.0) );
+        V = camera->getMatrix();
+
+        renderer->update(M,V);
+
 
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
         glDrawArrays(GL_TRIANGLES, 0, model.numVerts);
 
-        window->swapBuffers();
+        window->update();
+        camera->update(window);
     }
 
     // Cleanup
     delete window;
+    delete camera;
     glfwTerminate();
 
     return 0;

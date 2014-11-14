@@ -32,7 +32,7 @@ private:
     
 public:
 	Renderer();
-	void updateModelMatrix(glm::mat4 modelMat);
+	void update(glm::mat4 modelMat, glm::mat4 viewMat);
 	void initBuffers(Model m);
 	void initUniforms();
 	void useProgram(ShaderProgram* program);
