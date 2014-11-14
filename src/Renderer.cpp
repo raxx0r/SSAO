@@ -6,6 +6,20 @@ Renderer::Renderer() {
     glEnable(GL_DEPTH_TEST);
 }
 
+void Renderer::update(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat){
+
+    // Find GPU locations
+    GLuint mLoc = shaderProgram->getUniformLoc("M");
+    GLuint vLoc = shaderProgram->getUniformLoc("V");
+    //GLuint pLoc = shaderProgram->getUniformLoc("P");
+
+    // Send data to GPU
+    glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
+    glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
+    //glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(projMat));
+
+}
+
 // Attach two shaders and links them together, returns a pointer to the program.
 ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
 	shaderProgram = new ShaderProgram();
@@ -53,12 +67,6 @@ void Renderer::initUniforms() {
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(V));
     glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(P));
 }
-
-void Renderer::updateModelMatrix(glm::mat4 modelMat) {
-
-    GLuint mLoc = shaderProgram->getUniformLoc("M");
-    glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
-}   
    
 Renderer::~Renderer() {
 	glDeleteVertexArrays(1, &vao);

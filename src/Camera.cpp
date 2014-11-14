@@ -38,45 +38,43 @@ glm::mat4 Camera::getMatrix(){
 }
 
 
-void Camera::getUserInput(Window* window){
+void Camera::update(Window* window){
     GLFWwindow* glfwWindow = window->getWindow();
     GLfloat deltaTime = window->getDeltaTime();
     
-    /*
     if(window->isGrabbed()){
         glm::vec2 deltaMousePosition = window->getDeltaMousePosition();
         _rotation.y += deltaMousePosition.x * _rotateSpeed*deltaTime;
         _rotation.x += deltaMousePosition.y * _rotateSpeed*deltaTime;
 
-    }
-    */
-            
-    if(glfwGetKey(glfwWindow, GLFW_KEY_W)){
-        _position.x -= _moveSpeed * sinf((_rotation.y)*(M_PI /180.0)) * deltaTime;
-        _position.z -= _moveSpeed * cosf((_rotation.y)*(M_PI /180.0)) * deltaTime;
-    }
-    
-    if(glfwGetKey(glfwWindow, GLFW_KEY_S)){
-        _position.x -= _moveSpeed * sinf((_rotation.y + 180.0)*(M_PI /180.0)) * deltaTime;
-        _position.z -= _moveSpeed * cosf((_rotation.y + 180.0)*(M_PI /180.0)) * deltaTime;
-    }
+    }          
 
     if(glfwGetKey(glfwWindow, GLFW_KEY_A)){
         _position.x -= _moveSpeed * sinf((_rotation.y + 90.0)*(M_PI /180.0)) * deltaTime;
         _position.z -= _moveSpeed * cosf((_rotation.y + 90.0)*(M_PI /180.0)) * deltaTime;
     }
 
+    if(glfwGetKey(glfwWindow, GLFW_KEY_W)){
+        _position.y += _moveSpeed * deltaTime;
+    }
+    
+    if(glfwGetKey(glfwWindow, GLFW_KEY_S)){
+        _position.y -= _moveSpeed * deltaTime;
+    }
+
     if(glfwGetKey(glfwWindow, GLFW_KEY_D)){
         _position.x -= _moveSpeed * sinf((_rotation.y + 270.0)*(M_PI /180.0)) * deltaTime;
         _position.z -= _moveSpeed * cosf((_rotation.y + 270.0)*(M_PI /180.0)) * deltaTime;
     }
+
+    if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_SHIFT)){
+        _position.x -= _moveSpeed * sinf((_rotation.y)*(M_PI /180.0)) * deltaTime;
+        _position.z -= _moveSpeed * cosf((_rotation.y)*(M_PI /180.0)) * deltaTime;
+    }
     
     if(glfwGetKey(glfwWindow, GLFW_KEY_SPACE)){
-        _position.y += _moveSpeed * deltaTime;
+        _position.x -= _moveSpeed * sinf((_rotation.y + 180.0)*(M_PI /180.0)) * deltaTime;
+        _position.z -= _moveSpeed * cosf((_rotation.y + 180.0)*(M_PI /180.0)) * deltaTime;
     }
-    
-    if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_SHIFT)){
-        _position.y -= _moveSpeed * deltaTime;
-    }
-}
 
+}

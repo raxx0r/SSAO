@@ -35,9 +35,38 @@ Window::~Window(){
 
 }
 
-void Window::swapBuffers(){
+GLfloat Window::getDeltaTime(){
+    return _deltaTime;
+}
 
+void Window::update(){
+
+    // Get user input and swap buffers
+    glfwPollEvents();
     glfwSwapBuffers(window);
+    
+    // Calculate _deltaTime
+    GLdouble currentTime = glfwGetTime();
+    _deltaTime = currentTime - _lastBufferSwapTime;
+    _lastBufferSwapTime = currentTime;
+
+    // Mouse update
+    if(!_grabbed &&glfwGetMouseButton(window, 0)){
+        _grabbed = true;
+        GLdouble x, y;
+        glfwGetCursorPos(window, &x, &y);
+        _lastMousePos = glm::vec2(-x,-y);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    if(_grabbed && glfwGetKey(window, GLFW_KEY_ESCAPE)){
+        _grabbed = false;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    GLdouble x,y;
+    glfwGetCursorPos(window, &x, &y);
+    glm::vec2 currentMosPos = glm::vec2(-x,-y);
+    _deltaMousePos = currentMosPos - _lastMousePos;
+    _lastMousePos= currentMosPos;
 
 }
 
@@ -45,7 +74,13 @@ bool Window::isClosed(){
     return glfwWindowShouldClose(window);
 }
 
+bool Window::isGrabbed(){
+    return _grabbed;
+}
 
+glm::vec2 Window::getDeltaMousePosition(){
+    return _deltaMousePos;
+}
 
 GLint Window::getFrameBufferWidth(){
     GLint width;

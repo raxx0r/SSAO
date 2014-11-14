@@ -13,8 +13,8 @@ class Camera {
 	    void setRotation(glm::vec3 rotation);
 	    void setMoveSpeed(GLfloat moveSpeed);
 	    void setRotateSpeed(GLfloat rotateSpeed);
-	    glm::mat4 getMatrix();
-	    void getUserInput(Window* window);
+	    void update(Window* window);
+	  	glm::mat4 getMatrix();
 
 
 	private:
