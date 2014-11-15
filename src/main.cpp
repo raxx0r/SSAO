@@ -31,8 +31,10 @@ int main(void)
     delete phongFrag;
 
     glm::mat4 M, V, P;
+    int fps;
 
     while(!window->isClosed()){
+
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -50,6 +52,7 @@ int main(void)
 
         window->update();
         camera->update(window);
+
     }
 
     // Cleanup

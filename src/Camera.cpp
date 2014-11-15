@@ -46,6 +46,8 @@ glm::mat4 Camera::getMatrix(){
 // Camera update function
 void Camera::update(Window* window){
     // Calculate delaTime
+    glfwPollEvents();
+    
     GLFWwindow* glfwWindow = window->getWindow();
     GLfloat deltaTime = window->getDeltaTime();
     

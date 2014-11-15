@@ -14,6 +14,7 @@ class Window {
    	    bool isClosed();
 	    void update();
 	    glm::vec2 getDeltaMousePosition();
+	    void updateFPSCounter();
 	
 	private:
 		bool _grabbed;
@@ -22,4 +23,6 @@ class Window {
     	GLdouble _lastBufferSwapTime;
 	    glm::vec2 _lastMousePos;
 	    glm::vec2 _deltaMousePos;
+	    double _fpsTimeElapsed;
+	    int _frames;
 };
