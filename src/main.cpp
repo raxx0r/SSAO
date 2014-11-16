@@ -40,7 +40,7 @@ int main(void)
 
 
         GLfloat time = glfwGetTime();
-        M = glm::rotate( glm::mat4(), time, glm::vec3(0.0, 1.0, 0.0));
+        M = glm::mat4();//glm::rotate( glm::mat4(), time, glm::vec3(0.0, 1.0, 0.0));
         V = camera->getMatrix();
 
         renderer->update(M, V);
