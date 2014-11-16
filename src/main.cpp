@@ -37,6 +37,7 @@ int main(void)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
         //GLfloat time = glfwGetTime();
         M = glm::mat4(); //glm::rotate( glm::mat4(), time * 7.0f, glm::vec3(0.0, 1.0, 0.0));
         V = camera->getMatrix();

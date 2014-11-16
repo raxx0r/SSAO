@@ -5,7 +5,7 @@
 #include "ModelImporter.h"
 #include "LightSource.h"
 
-// GLM includes
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
 class Renderer {

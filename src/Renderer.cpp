@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Utils.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -87,7 +88,7 @@ void Renderer::initUniforms() {
     // Init matrices
     M = glm::mat4();
     V = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -30.0f));
-    P = glm::perspective(60.0f, aspect, 0.1f, 200.0f);
+    P = glm::perspective(Utils::degToRad(60.0f), aspect, 0.1f, 200.0f);
     N = glm::transpose(glm::inverse(glm::mat3(V * M)));
     vInv = glm::inverse(V);
 
