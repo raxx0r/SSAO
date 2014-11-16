@@ -2,10 +2,7 @@
 #define CAMERA_H
 
 #include "Window.h"
-
-#include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
-#define GLM_FORCE_RADIANS
 
 class Camera {
 	public:

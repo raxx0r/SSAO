@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include <string>
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
 class Window {
