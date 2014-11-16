@@ -4,7 +4,7 @@
 
 int main(void)
 {
-    Window* window = new Window(640, 480, "Screen Space Ambient Occlusion");
+    Window* window = new Window(800, 600, "Screen Space Ambient Occlusion");
     Camera* camera = new Camera();
 
     // Create shaders.
@@ -30,7 +30,7 @@ int main(void)
     delete phongFrag;
 
     glm::mat4 M, V, P;
-    LightSource* lightSource = new LightSource(glm::vec3(0.0, 20.0, 0.0), glm::vec3(1.0, 0.5f, 0.0));
+    LightSource* lightSource = new LightSource(glm::vec3(0.0, 11.0, 20.0), glm::vec3(1.0, 0.5f, 0.0));
     renderer->initLightSource(lightSource);
 
     while(!window->isClosed()) {

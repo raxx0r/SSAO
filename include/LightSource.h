@@ -1,3 +1,6 @@
+#ifndef LIGHT_SOURCE_H
+#define LIGHT_SOURCE_H
+
 #include <glm/glm.hpp>
 
 // TODO: Refactor to struct?
@@ -15,3 +18,5 @@ class LightSource {
 
     virtual ~LightSource();
 };
+
+#endif

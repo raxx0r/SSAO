@@ -1,3 +1,6 @@
+#ifndef RENDERER_H
+#define RENDERER_H
+
 #include "ShaderProgram.h"
 #include "ModelImporter.h"
 #include "LightSource.h"
@@ -42,3 +45,5 @@ class Renderer {
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
     virtual ~Renderer();
 };
+
+#endif

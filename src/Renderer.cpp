@@ -37,8 +37,8 @@ void Renderer::initLightSource(LightSource* lightSource) {
     GLuint lightPosLoc = shaderProgram->getUniformLoc("light_pos");
     GLuint lightColLoc = shaderProgram->getUniformLoc("light_col");
 
-    glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource->color()));
     glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightSource->position()));
+    glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource->color()));
 }
 
 
@@ -82,7 +82,7 @@ void Renderer::useProgram(ShaderProgram* program) {
 
 void Renderer::initUniforms() {
 
-	float aspect = (float) 640 / 480;
+	float aspect = (float) 800 / 600;
 
     // Init matrices
     M = glm::mat4();

@@ -1,3 +1,6 @@
+#ifndef WINDOW_H
+#define WINDOW_H
+
 #include <GLFW/glfw3.h>
 #include <string>
 #include <glm/glm.hpp>
@@ -23,3 +26,5 @@ class Window {
 	    glm::vec2 _lastMousePos;
 	    glm::vec2 _deltaMousePos;
 };
+
+#endif
