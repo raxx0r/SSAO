@@ -40,7 +40,7 @@ class Renderer {
 	void update(glm::mat4 modelMat, glm::mat4 viewMat);
 	void initBuffers(Model m);
 	void initUniforms();
-	void initLightSource(LightSource* lightSource);
+	void initLightSource(const LightSource& lightSource);
 	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
     virtual ~Renderer();

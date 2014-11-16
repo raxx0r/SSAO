@@ -34,12 +34,12 @@ void Renderer::update(glm::mat4 modelMat, glm::mat4 viewMat){
 
 }
 
-void Renderer::initLightSource(LightSource* lightSource) {
+void Renderer::initLightSource(const LightSource& lightSource) {
     GLuint lightPosLoc = shaderProgram->getUniformLoc("light_pos");
     GLuint lightColLoc = shaderProgram->getUniformLoc("light_col");
 
-    glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightSource->position()));
-    glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource->color()));
+    glUniform4fv(lightPosLoc, 1, glm::value_ptr(lightSource.position()));
+    glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource.color()));
 }
 
 
