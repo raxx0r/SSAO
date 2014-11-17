@@ -1,3 +1,6 @@
+#ifndef SHADER_PROGRAM_H
+#define SHADER_PROGRAM_H
+
 #include <Shader.h>
 #include <iostream>
 #include <string>
@@ -22,3 +25,5 @@ public:
 
     
 };
+
+#endif

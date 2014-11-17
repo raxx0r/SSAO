@@ -1,3 +1,6 @@
+#ifndef MODEL_IMPORTER_H
+#define MODEL_IMPORTER_H
+
 #include <string>
 #include <assimp/scene.h>    
 
@@ -17,3 +20,5 @@ private:
 	Model processObject(const aiScene*);
     
 };
+
+#endif
