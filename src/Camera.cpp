@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Utils.h"
+#include <stdio.h>
 
 // Camera Constructor
 // Intializing position, rotation, movement speed and rotation speed of camera
@@ -58,8 +59,8 @@ void Camera::update(Window* window){
     
     // Calculate the new position if specified key is pressed
     if(glfwGetKey(glfwWindow, GLFW_KEY_A)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y + 90.0f)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y + 90.0f)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(90.0f)) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y + Utils::degToRad(90.0f)) * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_W)){
         _position.y += _moveSpeed * deltaTime;
@@ -68,15 +69,15 @@ void Camera::update(Window* window){
         _position.y -= _moveSpeed * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_D)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y + 270.0f)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y + 270.0f)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(270.0f)) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y + Utils::degToRad(270.0f)) * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_SHIFT)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y) * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_SPACE)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y + 180.0f)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y + 180.0f)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(180.0f)) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y + Utils::degToRad(180.0f)) * deltaTime;
     }
 }

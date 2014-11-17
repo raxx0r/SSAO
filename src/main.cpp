@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Renderer.h"
 #include "Camera.h"
+#include "Utils.h"
 
 
 int main(void)
@@ -20,34 +21,40 @@ int main(void)
     renderer->useProgram(phongProgram);
 
     // Load in model.
-    ModelImporter* importer = new ModelImporter();
-    Model model = importer->importModel("models/teapot.obj");
-
+    Model* teapot = new Model("models/teapot.obj");
+    Model* sphere = new Model("models/sphere.obj");
+    
     // Setup VAO, VBO and Uniforms.
-    renderer->initBuffers(model);
+    renderer->initBuffers(teapot);
+    renderer->initBuffers(sphere);
     renderer->initUniforms();
 
     delete phongVert;
     delete phongFrag;
 
-    glm::mat4 M, V, P;
-
+    glm::mat4 M, M2, V, P;
+    
+    
     while(!window->isClosed()){
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Rotate object around z-axis.
-        //float time = glfwGetTime();
-
-        M = glm::mat4(); 
+        M = glm::rotate(M, Utils::degToRad(0.01), glm::vec3(1.0,0.0,0.0));
+	//M = glm::translate(glm::mat4(), glm::vec3(10.0,0.0,0.0));
         V = camera->getMatrix();
 
         renderer->update(M,V);
-
-
+    
         glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
-        glDrawArrays(GL_TRIANGLES, 0, model.numVerts);
+	glDrawArrays(GL_TRIANGLES, 0, teapot->numVertices);
+	
+	M2 = glm::translate(glm::mat4(), glm::vec3(-10.0,0.0,0.0));
+        V = camera->getMatrix();
 
+        renderer->update(M2,V);
+	
+	glDrawArrays(GL_TRIANGLES, teapot->numVertices, sphere->numVertices);
+	
         window->update();
         camera->update(window);
     }

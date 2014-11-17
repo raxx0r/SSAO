@@ -1,5 +1,5 @@
 #include "ShaderProgram.h"
-#include "ModelImporter.h"
+#include "Model.h"
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -29,11 +29,14 @@ private:
 
 	// Normal matrix
 	glm::mat3 N;
+	
+	int amountModels;
+	long offset;
     
 public:
 	Renderer();
 	void update(glm::mat4 modelMat, glm::mat4 viewMat);
-	void initBuffers(Model m);
+	void initBuffers(Model* m);
 	void initUniforms();
 	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
