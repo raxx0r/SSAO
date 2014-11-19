@@ -1,6 +1,8 @@
 #include "Camera.h"
 #include "Utils.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 // Camera Constructor
 // Intializing position, rotation, movement speed and rotation speed of camera
 Camera::Camera(){
@@ -44,24 +46,26 @@ glm::mat4 Camera::getMatrix(){
 }
 
 // Camera update function
-void Camera::update(Window* window){
+void Camera::update(Window& window){
     // Calculate delaTime
+
     glfwPollEvents();
     
-    GLFWwindow* glfwWindow = window->getWindow();
-    GLfloat deltaTime = window->getDeltaTime();
+    GLFWwindow* glfwWindow = window.getWindow();
+    GLfloat deltaTime = window.getDeltaTime();
+
     
     // Calculate the rotation while moving the mouse
-    if(window->isGrabbed()){
-        glm::vec2 deltaMousePosition = window->getDeltaMousePosition();
+    if(window.isGrabbed()){
+        glm::vec2 deltaMousePosition = window.getDeltaMousePosition();
         _rotation.y += deltaMousePosition.x * _rotateSpeed*deltaTime;
         _rotation.x += deltaMousePosition.y * _rotateSpeed*deltaTime;
     }          
     
     // Calculate the new position if specified key is pressed
     if(glfwGetKey(glfwWindow, GLFW_KEY_A)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y + 90.0f)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y + 90.0f)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(90.0f)) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y + Utils::degToRad(90.0f)) * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_W)){
         _position.y += _moveSpeed * deltaTime;
@@ -70,15 +74,15 @@ void Camera::update(Window* window){
         _position.y -= _moveSpeed * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_D)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y + 270.0f)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y + 270.0f)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(270.0f)) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y + Utils::degToRad(270.0f)) * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_LEFT_SHIFT)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y) * deltaTime;
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_SPACE)){
-        _position.x -= _moveSpeed * sinf(Utils::degToRad(_rotation.y + 180.0f)) * deltaTime;
-        _position.z -= _moveSpeed * cosf(Utils::degToRad(_rotation.y + 180.0f)) * deltaTime;
+        _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(180.0f)) * deltaTime;
+        _position.z -= _moveSpeed * cosf(_rotation.y + Utils::degToRad(180.0f)) * deltaTime;
     }
 }
