@@ -121,13 +121,13 @@ glm::vec2 Window::getDeltaMousePosition(){
     return _deltaMousePos;
 }
 
-GLint Window::getFrameBufferWidth(){
+GLint Window::getFramebufferWidth(){
     GLint width;
     glfwGetFramebufferSize(window, &width, NULL);
     return width;
 }
 
-GLint Window::getFrameBufferHeight(){
+GLint Window::getFramebufferHeight(){
     GLint height;
     glfwGetFramebufferSize(window, NULL, &height);
     return height;

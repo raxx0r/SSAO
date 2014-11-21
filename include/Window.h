@@ -10,8 +10,8 @@ class Window {
 	public:
 		Window(GLint width, GLint height, std::string s);
 		virtual ~Window();
-		GLint getFrameBufferWidth();
-    	GLint getFrameBufferHeight();
+		GLint getFramebufferWidth();
+    	GLint getFramebufferHeight();
     	GLFWwindow* getWindow();
     	GLfloat getDeltaTime();
 		bool isGrabbed();

@@ -10,7 +10,7 @@ Renderer::Renderer() {
 
     glEnable(GL_DEPTH_TEST);
 
-    // Don't draw triangles with face away from camera.
+    // Don't draw triangles with faces away from camera.
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 }

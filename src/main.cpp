@@ -1,11 +1,17 @@
 #include "Renderer.h"
 #include "Camera.h"
+#include "FboHandler.h"
 #include <stdio.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+enum WindowSize {
+    WIDTH = 800,
+    HEIGHT = 600
+};
+
 int main(void)
 {
-    Window window = Window(800, 600, "Screen Space Ambient Occlusion");
+    Window window = Window(WIDTH, HEIGHT, "Screen Space Ambient Occlusion");
     Camera camera = Camera();
 
     // Create shaders.
@@ -14,6 +20,13 @@ int main(void)
 
     // Initalize renderer.
     Renderer renderer = Renderer();
+
+    // Initalize FBO:s
+    FboHandler fboHandler = FboHandler();
+    fboHandler.initFBO(WIDTH, HEIGHT);
+
+    // Draw to window.
+    fboHandler.useFBO(0);
 
     // Create shader program with the two current shaders and make it the current program.
     ShaderProgram* phongProgram = renderer.buildShaderProgram(phongVert, phongFrag);
@@ -30,6 +43,7 @@ int main(void)
     renderer.initBuffers(model);
     renderer.initUniforms();
 
+
     glm::mat4 M, V, P;
 
     LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 11.0, 18.0), glm::vec3(1.0, 0.5, 0.0));
@@ -39,7 +53,6 @@ int main(void)
 
     while(!window.isClosed()) {
 
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // GLfloat time = glfwGetTime();
@@ -48,12 +61,11 @@ int main(void)
 
         renderer.update(M, V);
 
-        glViewport(0, 0, window.getFrameBufferWidth(), window.getFrameBufferHeight());
+        glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
         glDrawArrays(GL_TRIANGLES, 0, model.numVerts);
 
         window.update();
         camera.update(window);
-
     }
 
     // Cleanup
