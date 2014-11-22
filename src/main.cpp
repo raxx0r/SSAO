@@ -10,9 +10,6 @@ enum WindowSize {
     HEIGHT = 600
 };
 
-#include <stdio.h>
-#include <glm/gtc/matrix_transform.hpp>
-
 int main(void)
 {
     Window window = Window(WIDTH, HEIGHT, "Screen Space Ambient Occlusion");
@@ -52,21 +49,28 @@ int main(void)
     renderer.initBuffers(models, AMOUNT_MODELS);
     renderer.initUniforms();
 
-    glm::mat4 M, V, P;
+    glm::mat4 M = glm::mat4(), V = glm::mat4();
 
-    LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 11.0, 18.0), glm::vec3(1.0, 0.5, 0.0));
-    //LightSource* lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.7, 0.2f, 0.0));
+    LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.5, 0.0));
+    
     renderer.initLightSource(lightSource);
     
     while(!window.isClosed()){
 
+        float time = glfwGetTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
 
     	// Set movement of object
-    	sphere->setModelmatrix(glm::translate(sphere->getModelmatrix(), glm::vec3(0.01,0.0,0.0)));
-    	teapot->setModelmatrix(glm::rotate(teapot->getModelmatrix(), Utils::degToRad(0.05), glm::vec3(1.0,0.0,0.0)));
-    	
+        M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
+        M = glm::translate(M, glm::vec3(15.0, 0.0, 0.0));
+        M = glm::rotate(M, Utils::degToRad(90.0), glm::vec3(0.0, 1.0, 0.0));
+        teapot->setModelmatrix(M);
+        
+        M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
+        M = glm::translate(M, glm::vec3(-15.0, 5.0, 0.0));
+    	sphere->setModelmatrix(M);
+
     	// Draw each object
     	V = camera.getMatrix();
     	for(int i = 0; i < AMOUNT_MODELS; i++) {
