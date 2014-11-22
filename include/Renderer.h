@@ -36,7 +36,7 @@ private:
 public:
 	Renderer();
 	void update(glm::mat4 modelMat, glm::mat4 viewMat);
-	void initBuffers(Model* m);
+	void initBuffers(Model* m[], const int AMOUNT_MODELS);
 	void initUniforms();
 	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);

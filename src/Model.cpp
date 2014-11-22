@@ -32,6 +32,21 @@ Model::Model(const std::string& filePath) {
     processObject(scene);
 }
 
+void Model::setOffset(long offs) {
+    offset = offs;
+}
+
+long Model::getOffset() {
+    return offset;
+}
+
+void Model::setModelmatrix(glm::mat4 m) {
+    modelmatrix = m;
+}
+
+glm::mat4 Model::getModelmatrix(){
+    return modelmatrix;
+}
 // Processes a scene that only consists of one object (one mesh).
 void Model::processObject(const aiScene* object) {
 

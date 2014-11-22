@@ -21,12 +21,15 @@ int main(void)
     renderer->useProgram(phongProgram);
 
     // Load in model.
+    int const AMOUNT_MODELS = 2;
+    Model* models[AMOUNT_MODELS]; 
     Model* teapot = new Model("models/teapot.obj");
     Model* sphere = new Model("models/sphere.obj");
+    models[0] = teapot;
+    models[1] = sphere;
     
     // Setup VAO, VBO and Uniforms.
-    renderer->initBuffers(teapot);
-    renderer->initBuffers(sphere);
+    renderer->initBuffers(models, AMOUNT_MODELS);
     renderer->initUniforms();
 
     delete phongVert;
@@ -34,32 +37,30 @@ int main(void)
 
     glm::mat4 M, M2, V, P;
     
-    
     while(!window->isClosed()){
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
 
-        M = glm::rotate(M, Utils::degToRad(0.01), glm::vec3(1.0,0.0,0.0));
-	//M = glm::translate(glm::mat4(), glm::vec3(10.0,0.0,0.0));
-        V = camera->getMatrix();
-
-        renderer->update(M,V);
-    
-        glViewport(0, 0, window->getFrameBufferWidth(), window->getFrameBufferHeight());
-	glDrawArrays(GL_TRIANGLES, 0, teapot->numVertices);
+	// Set movement of object
+	sphere->setModelmatrix(glm::translate(sphere->getModelmatrix(), glm::vec3(0.01,0.0,0.0)));
+	teapot->setModelmatrix(glm::rotate(teapot->getModelmatrix(), Utils::degToRad(0.01), glm::vec3(1.0,0.0,0.0)));
 	
-	M2 = glm::translate(glm::mat4(), glm::vec3(-10.0,0.0,0.0));
-        V = camera->getMatrix();
-
-        renderer->update(M2,V);
-	
-	glDrawArrays(GL_TRIANGLES, teapot->numVertices, sphere->numVertices);
-	
+	// Draw each object
+	V = camera->getMatrix();
+	for(int i = 0; i < AMOUNT_MODELS; i++) {
+	  renderer->update(models[i]->getModelmatrix(),V);
+	  glDrawArrays(GL_TRIANGLES, models[i]->getOffset(), models[i]->numVertices);
+	}
+        
         window->update();
         camera->update(window);
     }
 
     // Cleanup
+    for(int i = 0; i < AMOUNT_MODELS; i++) {
+	delete models[i];
+    }
     delete window;
     delete camera;
     glfwTerminate();

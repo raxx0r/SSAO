@@ -41,39 +41,53 @@ ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
 }
 
 // Init buffers for rendering. 
-void Renderer::initBuffers(Model* m) {
-    // Generate VBOs
-    amountModels += 1;
-    long size = 3.0 * sizeof(float) * m->numVertices;
+void Renderer::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     
-    // Buffer positions
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
-    if(amountModels == 1)
-      glBufferData(GL_ARRAY_BUFFER, 160.0 * sizeof(float) * m->numVertices, NULL, GL_STATIC_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, offset, size, m->vertices);
-    
+    long bufferSize = 0;
     GLuint posLoc = shaderProgram->getAttribLoc("position");
-    glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
-    glEnableVertexAttribArray(posLoc);
-    
-    // Buffer normals
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
-    if(amountModels == 1)
-      glBufferData(GL_ARRAY_BUFFER, 160.0 * sizeof(float) * m->numVertices, NULL, GL_STATIC_DRAW);
-    
-    glBufferSubData(GL_ARRAY_BUFFER, offset ,size ,m->normals);
-    
     GLuint normLoc = shaderProgram->getAttribLoc("normal");    
-    glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
-    glEnableVertexAttribArray(normLoc);
+    // Calculate the buffer size
+    for(int i = 0; i < AMOUNT_MODELS; i++) {
+      bufferSize += 3.0 * sizeof(float) * m[i]->numVertices;
+    }
     
+    // Give specified size to position buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
     
-    glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(normLoc);
+    // Give specified size to normal budder
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
+    
+    for(int i = 0; i < AMOUNT_MODELS; i++) {
+      long size = 3.0 * sizeof(float) * m[i]->numVertices;
+      
+      // Position buffer
+      glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
+      glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->vertices);
+      
+      glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+      glEnableVertexAttribArray(posLoc);
+      
+      // Normal buffer
+      glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
+      glBufferSubData(GL_ARRAY_BUFFER, offset ,size ,m[i]->normals);
+      
+      glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+      glEnableVertexAttribArray(normLoc);
+      
+      m[i]->setOffset(offset/(3.0 * sizeof(float)));
+      
+      offset += 3.0 * sizeof(float) * m[i]->numVertices;
+    }
+      
+    // Set attribute pointer to first object
     glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
     glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(posLoc);
-    offset += 3.0 * sizeof(float) * m->numVertices;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
+    glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(normLoc);
 }
 
 void Renderer::useProgram(ShaderProgram* program) {
