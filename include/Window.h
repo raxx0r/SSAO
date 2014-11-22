@@ -8,6 +8,7 @@
 
 class Window {
 	public:
+
 		Window(GLint width, GLint height, std::string s);
 		virtual ~Window();
 		GLint getFramebufferWidth();

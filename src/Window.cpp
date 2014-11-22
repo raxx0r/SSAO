@@ -2,9 +2,6 @@
 #include <iostream>
 #include <sstream>
 
-
-
-
 Window::Window(GLint width, GLint height, std::string s){
 
     // Initialize the library. 

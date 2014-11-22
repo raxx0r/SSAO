@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Camera.h"
 #include "FboHandler.h"
+#include "Utils.h"
 #include <stdio.h>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -8,6 +9,9 @@ enum WindowSize {
     WIDTH = 800,
     HEIGHT = 600
 };
+
+#include <stdio.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 int main(void)
 {
@@ -36,41 +40,49 @@ int main(void)
     delete phongFrag;
 
     // Load in model.
-    ModelImporter importer = ModelImporter();
-    Model model = importer.importModel("models/teapot.obj");
-
+    int const AMOUNT_MODELS = 2;
+    Model* models[AMOUNT_MODELS]; 
+    Model* teapot = new Model("models/teapot.obj");
+    Model* sphere = new Model("models/sphere.obj");
+    models[0] = teapot;
+    models[1] = sphere;
+    
     // Setup VAO, VBO and Uniforms.
-    renderer.initBuffers(model);
+    renderer.initBuffers(models, AMOUNT_MODELS);
     renderer.initUniforms();
-
 
     glm::mat4 M, V, P;
 
     LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 11.0, 18.0), glm::vec3(1.0, 0.5, 0.0));
     //LightSource* lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.7, 0.2f, 0.0));
     renderer.initLightSource(lightSource);
-
-
-    while(!window.isClosed()) {
+    
+    while(!window.isClosed()){
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    	glViewport(0, 0, window.getFrameBufferWidth(), window.getFrameBufferHeight());
 
-        // GLfloat time = glfwGetTime();
-        M = glm::mat4();//glm::rotate( glm::mat4(), time, glm::vec3(0.0, 1.0, 0.0));
-        V = camera.getMatrix();
-
-        renderer.update(M, V);
-
-        glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
-        glDrawArrays(GL_TRIANGLES, 0, model.numVerts);
-
+    	// Set movement of object
+    	sphere->setModelmatrix(glm::translate(sphere->getModelmatrix(), glm::vec3(0.01,0.0,0.0)));
+    	teapot->setModelmatrix(glm::rotate(teapot->getModelmatrix(), Utils::degToRad(0.01), glm::vec3(1.0,0.0,0.0)));
+    	
+    	// Draw each object
+    	V = camera.getMatrix();
+    	for(int i = 0; i < AMOUNT_MODELS; i++) {
+    	  renderer.update(models[i]->getModelmatrix(),V);
+    	  glDrawArrays(GL_TRIANGLES, models[i]->getOffset(), models[i]->numVertices);
+    	}
+            
         window.update();
         camera.update(window);
     }
 
     // Cleanup
+    for(int i = 0; i < AMOUNT_MODELS; i++) {
+	   delete models[i];
+    }
+    
     delete phongProgram;
-
     glfwTerminate();
 
     return 0;

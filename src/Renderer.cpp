@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Utils.h"
+#include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -13,6 +14,9 @@ Renderer::Renderer() {
     // Don't draw triangles with faces away from camera.
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    
+    glGenBuffers(2, vbo);
+    offset = 0;
 }
 
 void Renderer::update(glm::mat4 modelMat, glm::mat4 viewMat){ 
@@ -45,8 +49,8 @@ void Renderer::initLightSource(const LightSource& lightSource) {
 
 // Attach two shaders and links them together, returns a pointer to the program.
 ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
-	shaderProgram = new ShaderProgram();
-	shaderProgram->attachShader(vert);
+    shaderProgram = new ShaderProgram();
+    shaderProgram->attachShader(vert);
     shaderProgram->attachShader(frag);
     shaderProgram->bindFragDataLocation(0, "out_color");
     shaderProgram->link();
@@ -55,24 +59,51 @@ ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
 }
 
 // Init buffers for rendering. 
-void Renderer::initBuffers(Model m) {
-
-    // Generate VBOs
-    glGenBuffers(2, vbo);
-
-    // Buffer positions
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
-    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(GLfloat) * m.numVerts, m.vertices, GL_STATIC_DRAW);
-
+void Renderer::initBuffers(Model* m[], const int AMOUNT_MODELS) {
+    
+    long bufferSize = 0;
     GLuint posLoc = shaderProgram->getAttribLoc("position");
+    GLuint normLoc = shaderProgram->getAttribLoc("normal");    
+    // Calculate the buffer size
+    for(int i = 0; i < AMOUNT_MODELS; i++) {
+      bufferSize += 3.0 * sizeof(float) * m[i]->numVertices;
+    }
+    
+    // Give specified size to position buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
+    
+    // Give specified size to normal budder
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
+    
+    for(int i = 0; i < AMOUNT_MODELS; i++) {
+      long size = 3.0 * sizeof(float) * m[i]->numVertices;
+      
+      // Position buffer
+      glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
+      glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->vertices);
+      
+      glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+      glEnableVertexAttribArray(posLoc);
+      
+      // Normal buffer
+      glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
+      glBufferSubData(GL_ARRAY_BUFFER, offset ,size ,m[i]->normals);
+      
+      glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+      glEnableVertexAttribArray(normLoc);
+      
+      m[i]->setOffset(offset/(3.0 * sizeof(float)));
+      
+      offset += 3.0 * sizeof(float) * m[i]->numVertices;
+    }
+      
+    // Set attribute pointer to first object
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
     glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(posLoc);
-
-    // Buffer normals
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
-    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(GLfloat) * m.numVerts, m.normals, GL_STATIC_DRAW);
-
-    GLuint normLoc = shaderProgram->getAttribLoc("normal");
     glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(normLoc);
 }
@@ -109,7 +140,7 @@ void Renderer::initUniforms() {
 
    
 Renderer::~Renderer() {
-	glDeleteVertexArrays(1, &vao);
+    glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(2, vbo);
     delete shaderProgram;
 }

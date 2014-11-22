@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Utils.h"
+#include <stdio.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
