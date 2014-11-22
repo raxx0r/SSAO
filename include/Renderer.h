@@ -43,8 +43,8 @@ class Renderer {
 	void initBuffers(Model* m[], const int AMOUNT_MODELS);
 	void initUniforms();
 	void initLightSource(const LightSource& lightSource);
-	void useProgram(ShaderProgram* program);
-	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
+	void useProgram(ShaderProgram& program);
+	void buildShaderProgram(ShaderProgram& program, Shader* vert, Shader* frag);
     virtual ~Renderer();
 };
 

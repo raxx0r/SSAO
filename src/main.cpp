@@ -33,7 +33,8 @@ int main(void)
     fboHandler.useFBO(0);
 
     // Create shader program with the two current shaders and make it the current program.
-    ShaderProgram* phongProgram = renderer.buildShaderProgram(phongVert, phongFrag);
+    ShaderProgram phongProgram;
+    renderer.buildShaderProgram(phongProgram, phongVert, phongFrag);
     renderer.useProgram(phongProgram);
 
     delete phongVert;
@@ -60,11 +61,11 @@ int main(void)
     while(!window.isClosed()){
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    	glViewport(0, 0, window.getFrameBufferWidth(), window.getFrameBufferHeight());
+    	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
 
     	// Set movement of object
     	sphere->setModelmatrix(glm::translate(sphere->getModelmatrix(), glm::vec3(0.01,0.0,0.0)));
-    	teapot->setModelmatrix(glm::rotate(teapot->getModelmatrix(), Utils::degToRad(0.01), glm::vec3(1.0,0.0,0.0)));
+    	teapot->setModelmatrix(glm::rotate(teapot->getModelmatrix(), Utils::degToRad(0.05), glm::vec3(1.0,0.0,0.0)));
     	
     	// Draw each object
     	V = camera.getMatrix();
@@ -82,7 +83,6 @@ int main(void)
 	   delete models[i];
     }
     
-    delete phongProgram;
     glfwTerminate();
 
     return 0;

@@ -47,15 +47,13 @@ void Renderer::initLightSource(const LightSource& lightSource) {
 }
 
 
-// Attach two shaders and links them together, returns a pointer to the program.
-ShaderProgram* Renderer::buildShaderProgram(Shader* vert, Shader* frag) {
-    shaderProgram = new ShaderProgram();
+// Attach two shaders and links them together to create a ShaderProgram.
+void Renderer::buildShaderProgram(ShaderProgram& program, Shader* vert, Shader* frag) {
+    shaderProgram = &program;
     shaderProgram->attachShader(vert);
     shaderProgram->attachShader(frag);
     shaderProgram->bindFragDataLocation(0, "out_color");
     shaderProgram->link();
-
-    return shaderProgram;
 }
 
 // Init buffers for rendering. 
@@ -64,9 +62,10 @@ void Renderer::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     long bufferSize = 0;
     GLuint posLoc = shaderProgram->getAttribLoc("position");
     GLuint normLoc = shaderProgram->getAttribLoc("normal");    
+
     // Calculate the buffer size
     for(int i = 0; i < AMOUNT_MODELS; i++) {
-      bufferSize += 3.0 * sizeof(float) * m[i]->numVertices;
+        bufferSize += 3.0 * sizeof(float) * m[i]->numVertices;
     }
     
     // Give specified size to position buffer
@@ -78,25 +77,25 @@ void Renderer::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
     
     for(int i = 0; i < AMOUNT_MODELS; i++) {
-      long size = 3.0 * sizeof(float) * m[i]->numVertices;
+        long size = 3.0 * sizeof(float) * m[i]->numVertices;
       
-      // Position buffer
-      glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
-      glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->vertices);
+        // Position buffer
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
+        glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->vertices);
       
-      glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
-      glEnableVertexAttribArray(posLoc);
+        glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+        glEnableVertexAttribArray(posLoc);
       
-      // Normal buffer
-      glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
-      glBufferSubData(GL_ARRAY_BUFFER, offset ,size ,m[i]->normals);
+        // Normal buffer
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
+        glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->normals);
       
-      glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
-      glEnableVertexAttribArray(normLoc);
+        glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+        glEnableVertexAttribArray(normLoc);
       
-      m[i]->setOffset(offset/(3.0 * sizeof(float)));
+        m[i]->setOffset(offset / (3.0 * sizeof(float)));
       
-      offset += 3.0 * sizeof(float) * m[i]->numVertices;
+        offset += 3.0 * sizeof(float) * m[i]->numVertices;
     }
       
     // Set attribute pointer to first object
@@ -108,8 +107,8 @@ void Renderer::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     glEnableVertexAttribArray(normLoc);
 }
 
-void Renderer::useProgram(ShaderProgram* program) {
-    program->use();
+void Renderer::useProgram(ShaderProgram& program) {
+    program.use();
 }
 
 void Renderer::initUniforms() {
@@ -142,5 +141,4 @@ void Renderer::initUniforms() {
 Renderer::~Renderer() {
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(2, vbo);
-    delete shaderProgram;
 }
