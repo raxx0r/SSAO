@@ -2,6 +2,8 @@
 #include "Utils.h"
 #include <stdio.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 // Camera Constructor
 // Intializing position, rotation, movement speed and rotation speed of camera
 Camera::Camera(){
@@ -45,14 +47,18 @@ glm::mat4 Camera::getMatrix(){
 }
 
 // Camera update function
-void Camera::update(Window* window){
+void Camera::update(Window& window){
     // Calculate delaTime
-    GLFWwindow* glfwWindow = window->getWindow();
-    GLfloat deltaTime = window->getDeltaTime();
+
+    glfwPollEvents();
+    
+    GLFWwindow* glfwWindow = window.getWindow();
+    GLfloat deltaTime = window.getDeltaTime();
+
     
     // Calculate the rotation while moving the mouse
-    if(window->isGrabbed()){
-        glm::vec2 deltaMousePosition = window->getDeltaMousePosition();
+    if(window.isGrabbed()){
+        glm::vec2 deltaMousePosition = window.getDeltaMousePosition();
         _rotation.y += deltaMousePosition.x * _rotateSpeed*deltaTime;
         _rotation.x += deltaMousePosition.y * _rotateSpeed*deltaTime;
     }          
