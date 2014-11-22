@@ -15,13 +15,10 @@ LDFLAGS = `pkg-config --libs glfw3` -lglfw3 -framework OpenGL -framework Cocoa \
 		  `pkg-config --libs assimp` 
 endif
 
-_OBJS = main.o ShaderProgram.o Shader.o Renderer.o Model.o \
-		Window.o Camera.o
+SRCS = $(wildcard src/*.cpp)
+OBJS = $(SRCS:src/%.cpp=build/%.o)
 
-OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
-
-
-$(ODIR)/%.o: $(SDIR)/%.cpp 
+$(ODIR)/%.o: $(SDIR)/%.cpp  
 	@test -d build || mkdir -p build
 	$(CC) $(CFLAGS) $(INC) -o $@ $< $(CFLAGS) 
 

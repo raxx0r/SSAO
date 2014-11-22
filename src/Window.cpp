@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <iostream>
+#include <sstream>
 
 Window::Window(GLint width, GLint height, std::string s){
 
@@ -24,6 +25,9 @@ Window::Window(GLint width, GLint height, std::string s){
     // Make the window's context current.
     glfwMakeContextCurrent(window);
 
+    _frames = 0;
+    _fpsTimeElapsed = glfwGetTime();
+
 }
 
 Window::~Window(){
@@ -32,8 +36,40 @@ Window::~Window(){
 
 }
 
-GLfloat Window::getDeltaTime(){
-    return _deltaTime;
+void Window::updateFPSCounter(){
+    double currentTime = glfwGetTime();
+    std::stringstream ss;
+
+    int type = 0;
+
+    if(type == 1){
+
+        if ( (currentTime - _fpsTimeElapsed) > 1.0){
+            double fps; 
+            fps = _frames * 1.0 / (currentTime - _fpsTimeElapsed);
+            //printf("%d\n", _frames);
+            _fpsTimeElapsed = currentTime;
+
+            ss << "FPS: " << fps;
+            _frames = 0;
+            glfwSetWindowTitle(window, ss.str().c_str());
+        }
+    }else{
+
+
+            if(_frames % 60 == 0){
+                ss << "FPS: " << round(1.0f / (currentTime - _fpsTimeElapsed));
+                glfwSetWindowTitle(window, ss.str().c_str());
+            }
+            _fpsTimeElapsed = currentTime;
+
+        
+        
+    }
+    
+
+    _frames++;
+
 }
 
 void Window::update(){
@@ -65,6 +101,9 @@ void Window::update(){
     _deltaMousePos = currentMosPos - _lastMousePos;
     _lastMousePos= currentMosPos;
 
+    // FPS
+    updateFPSCounter();
+
 }
 
 bool Window::isClosed(){
@@ -89,6 +128,10 @@ GLint Window::getFrameBufferHeight(){
     GLint height;
     glfwGetFramebufferSize(window, NULL, &height);
     return height;
+}
+
+GLfloat Window::getDeltaTime(){
+    return _deltaTime;
 }
 
 GLFWwindow* Window::getWindow(){

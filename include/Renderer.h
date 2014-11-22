@@ -1,14 +1,16 @@
+#ifndef RENDERER_H
+#define RENDERER_H
+
 #include "ShaderProgram.h"
+#include "LightSource.h"
 #include "Model.h"
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 class Renderer {
 
-private:
+  private:
 	enum vboIndices {
 		POSITION_VBO,
 		NORMAL_VBO
@@ -24,21 +26,26 @@ private:
 	// View matrix
 	glm::mat4 V;
 
+	// Inverted view matrix, used for specular highlights.
+	glm::mat4 vInv;
+
 	// Model matrix
 	glm::mat4 M;
 
 	// Normal matrix
 	glm::mat3 N;
 	
-	int amountModels;
 	long offset;
     
-public:
+  public:
 	Renderer();
 	void update(glm::mat4 modelMat, glm::mat4 viewMat);
 	void initBuffers(Model* m[], const int AMOUNT_MODELS);
 	void initUniforms();
+	void initLightSource(const LightSource& lightSource);
 	void useProgram(ShaderProgram* program);
 	ShaderProgram* buildShaderProgram(Shader* vert, Shader* frag);
     virtual ~Renderer();
 };
+
+#endif
