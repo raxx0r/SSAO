@@ -31,7 +31,7 @@ int main(void)
 
     // Create shader program with the two current shaders and make it the current program.
     ShaderProgram phongProgram;
-    renderer.buildShaderProgram(phongProgram, phongVert, phongFrag);
+    renderer.buildShaderProgram(&phongProgram, phongVert, phongFrag);
     renderer.useProgram(phongProgram);
 
     delete phongVert;

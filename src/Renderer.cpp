@@ -48,8 +48,8 @@ void Renderer::initLightSource(const LightSource& lightSource) {
 
 
 // Attach two shaders and links them together to create a ShaderProgram.
-void Renderer::buildShaderProgram(ShaderProgram& program, Shader* vert, Shader* frag) {
-    shaderProgram = &program;
+void Renderer::buildShaderProgram(ShaderProgram* program, Shader* vert, Shader* frag) {
+    shaderProgram = program;
     shaderProgram->attachShader(vert);
     shaderProgram->attachShader(frag);
     shaderProgram->bindFragDataLocation(0, "out_color");

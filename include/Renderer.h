@@ -44,7 +44,7 @@ class Renderer {
 	void initUniforms();
 	void initLightSource(const LightSource& lightSource);
 	void useProgram(ShaderProgram& program);
-	void buildShaderProgram(ShaderProgram& program, Shader* vert, Shader* frag);
+	void buildShaderProgram(ShaderProgram* program, Shader* vert, Shader* frag);
     virtual ~Renderer();
 };
 

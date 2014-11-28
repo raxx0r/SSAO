@@ -3,10 +3,10 @@
 
 #include <glm/glm.hpp>
 
-// Represents the lightsource to be rendered to the scene.
-// It is possible to create both point- and directional lights by using
-// the factory methods provided. The position parameter for a directional light
-// is simply the direction of the light.
+/// Represents the lightsource to be rendered to the scene.
+/// It is possible to create both point- and directional lights by using
+/// the factory methods provided. The position parameter for a directional light
+/// is simply the direction of the light.
 class LightSource {
 
   private:
