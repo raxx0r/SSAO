@@ -30,8 +30,8 @@ int main(void)
     fboHandler.useFBO(0);
 
     // Create shader program with the two current shaders and make it the current program.
-    ShaderProgram phongProgram;
-    renderer.buildShaderProgram(&phongProgram, phongVert, phongFrag);
+    ShaderProgram phongProgram(phongVert, phongFrag);
+    renderer.buildShaderProgram(&phongProgram);
     renderer.useProgram(phongProgram);
 
     delete phongVert;
@@ -46,9 +46,9 @@ int main(void)
     models[1] = sphere;
     
     // Setup VAO, VBO and Uniforms.
-    renderer.initBuffers(models, AMOUNT_MODELS);
-    renderer.initUniforms();
-
+    phongProgram.initBuffers(models, AMOUNT_MODELS);
+    phongProgram.initUniforms();
+    
     glm::mat4 M = glm::mat4(), V = glm::mat4();
 
     LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.5, 0.0));
@@ -74,7 +74,7 @@ int main(void)
     	// Draw each object
     	V = camera.getMatrix();
     	for(int i = 0; i < AMOUNT_MODELS; i++) {
-    	  renderer.update(models[i]->getModelmatrix(),V);
+	  phongProgram.update(models[i]->getModelmatrix(),V);
     	  glDrawArrays(GL_TRIANGLES, models[i]->getOffset(), models[i]->numVertices);
     	}
             
