@@ -40,16 +40,13 @@ void BaseShaderProgram::link() {
 }
 
 void BaseShaderProgram::use() {
+    glBindVertexArray(vao); 
     glUseProgram(programID);
 }
     
 GLuint BaseShaderProgram::getProgramID() {
     return programID;
-} 
-
-GLint BaseShaderProgram::getAttribLoc(std::string name) {
-    return glGetAttribLocation(programID, name.c_str());
-}        
+}       
     
 GLint BaseShaderProgram::getUniformLoc(std::string name) {
     return glGetUniformLocation(programID, name.c_str());

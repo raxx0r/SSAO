@@ -9,11 +9,13 @@ class SSAOShaderProgram : public BaseShaderProgram {
     ~SSAOShaderProgram();
     
     void update();
+    void use();
     void initUniforms();
-    void initBuffers(Model* m[], const int AMOUNT_MODELS); 
+    void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0); 
 
   private:
     GLuint vbo;
+    GLuint ebo;
 };
 
 #endif // SSAO_SHADER_PROGRAM_H

@@ -7,6 +7,15 @@ PhongShaderProgram::~PhongShaderProgram() {
     glDeleteBuffers(2, vbo);
 }
 
+void PhongShaderProgram::use() {
+    BaseShaderProgram::use();
+    glEnable(GL_DEPTH_TEST);
+
+    // Don't draw triangles with faces away from camera.
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+}
+
 void PhongShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat){ 
 
     // Find GPU locations
@@ -26,15 +35,21 @@ void PhongShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat){
 }
 
 void PhongShaderProgram::initLightSource(const LightSource* lightSource) {
+
+    glBindVertexArray(vao);
+
     GLuint lightPosLoc = getUniformLoc("light_pos");
     GLuint lightColLoc = getUniformLoc("light_col");
 
     glUniform4fv(lightPosLoc, 1, glm::value_ptr(lightSource->position()));
     glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource->color()));
+
+    glBindVertexArray(0);
 }
 
 void PhongShaderProgram::initUniforms() {
 
+    glBindVertexArray(vao);
     float aspect = (float) 800 / 600;
 
     // Init matrices
@@ -57,10 +72,14 @@ void PhongShaderProgram::initUniforms() {
     glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(P));
     glUniformMatrix4fv(vInvLoc, 1, GL_FALSE, glm::value_ptr(vInv));
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
+
+    glBindVertexArray(0);
 }
 
 // Init buffers for rendering. 
 void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
+
+    glBindVertexArray(vao);
 
     // Initialize vbo
     glGenBuffers(2, vbo);
@@ -110,4 +129,7 @@ void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
     glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(NORMAL_LOC);
+    
+    // Unbind
+    glBindVertexArray(0);
 }

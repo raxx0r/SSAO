@@ -10,6 +10,7 @@ class PhongShaderProgram : public BaseShaderProgram {
     ~PhongShaderProgram();
     
     void update(glm::mat4 modelMat, glm::mat4 viewMat);
+    void use();
     void initUniforms();
     void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0);
     void initLightSource(const LightSource* lightSource);     
