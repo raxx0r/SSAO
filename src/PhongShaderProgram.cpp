@@ -1,34 +1,13 @@
-#include "ShaderProgram.h"
+#include "PhongShaderProgram.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-ShaderProgram::ShaderProgram(Shader* vert, Shader* frag) {
-    programID = glCreateProgram();
-    
-    // Attach two shaders and links them together to create a ShaderProgram
-    attachShader(vert);
-    attachShader(frag);
-    bindFragDataLocation(0, "out_color");
-    link();
-    
-    // Intialize vao
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-     
-    // Initialize vbo
-    glGenBuffers(2, vbo);
-    offset = 0;
-}
-
-ShaderProgram::~ShaderProgram() {
-    glDeleteShader(programID);
-    glDeleteVertexArrays(1, &vao);
+PhongShaderProgram::~PhongShaderProgram() {
+    BaseShaderProgram::~BaseShaderProgram();
     glDeleteBuffers(2, vbo);
 }
 
-void ShaderProgram::attachShader(Shader* shader) {
-    glAttachShader(programID, shader->getShaderID());
-}
-
-void ShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat){ 
+void PhongShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat){ 
 
     // Find GPU locations
     GLuint mLoc = getUniformLoc("M");
@@ -47,7 +26,7 @@ void ShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat){
 
 }
 
-void ShaderProgram::initUniforms() {
+void PhongShaderProgram::initUniforms() {
 
     float aspect = (float) 800 / 600;
 
@@ -74,7 +53,11 @@ void ShaderProgram::initUniforms() {
 }
 
 // Init buffers for rendering. 
-void ShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
+void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
+
+    // Initialize vbo
+    glGenBuffers(2, vbo);
+    offset = 0;
     
     long bufferSize = 0;
     GLuint posLoc = getAttribLoc("position");
@@ -122,43 +105,4 @@ void ShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
     glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(normLoc);
-}
-
-// Links the attached shaders together, prints out an error message if
-// linking fails.
-void ShaderProgram::link() {
-    
-    glLinkProgram(programID);
-    
-    GLint linkStatus;
-    glGetProgramiv(programID, GL_LINK_STATUS, &linkStatus);
-    if (linkStatus != GL_TRUE) {
-        std::cout << "Program link failed!" << std::endl;
-        GLint infoLogLength;
-        glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
-        GLchar* infoLog = new GLchar[infoLogLength + 1];
-        glGetProgramInfoLog(programID, infoLogLength, NULL, infoLog);
-        std::cout << infoLog << std::endl;
-        delete[] infoLog;
-    }
-}
-
-void ShaderProgram::use() {
-    glUseProgram(programID);
-}
-
-GLuint ShaderProgram::getProgramID() {
-    return programID;
-}
-
-void ShaderProgram::bindFragDataLocation(GLint colorAttachment, std::string name){
-    glBindFragDataLocation(programID, colorAttachment, name.c_str());
-}
-
-GLint ShaderProgram::getAttribLoc(std::string name) {
-    return glGetAttribLocation(programID, name.c_str());
-}
-
-GLint ShaderProgram::getUniformLoc(std::string name) {
-    return glGetUniformLocation(programID, name.c_str());
 }

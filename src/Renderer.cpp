@@ -1,4 +1,6 @@
 #include "Renderer.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 Renderer::Renderer() {
     glEnable(GL_DEPTH_TEST);
@@ -16,11 +18,11 @@ void Renderer::initLightSource(const LightSource& lightSource) {
     glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource.color()));
 }
 
-void Renderer::buildShaderProgram(ShaderProgram* program) {
+void Renderer::buildShaderProgram(BaseShaderProgram* program) {
     shaderProgram = program;
 }
 
-void Renderer::useProgram(ShaderProgram& program) {
+void Renderer::useProgram(BaseShaderProgram& program) {
     program.use();
 }
    
