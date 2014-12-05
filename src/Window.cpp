@@ -28,6 +28,12 @@ Window::Window(GLint width, GLint height, std::string s){
     _frames = 0;
     _fpsTimeElapsed = glfwGetTime();
 
+    glEnable(GL_DEPTH_TEST);
+
+    // Don't draw triangles with faces away from camera.
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
 }
 
 Window::~Window(){

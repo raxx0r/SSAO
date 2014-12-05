@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Model.h"
 #include "Utils.h"
+#include "LightSource.h"
 
 #include <iostream>
 #include <string>
@@ -22,7 +23,9 @@ class BaseShaderProgram {
     virtual ~BaseShaderProgram();
     
     virtual void initUniforms() = 0;
-    void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0);
+    virtual void initBuffers(Model* m[], const int AMOUNT_MODELS) = 0;
+    virtual void initLightSource(const LightSource* lightSource) {};
+
     void bindFragDataLocation(GLint colorAttachment, std::string name);
     void attachShader(Shader* shader);
     void link();

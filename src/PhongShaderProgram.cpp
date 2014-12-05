@@ -23,7 +23,14 @@ void PhongShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat){
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
     glUniformMatrix4fv(vInvLoc, 1, GL_FALSE, glm::value_ptr(vInv));
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
+}
 
+void PhongShaderProgram::initLightSource(const LightSource* lightSource) {
+    GLuint lightPosLoc = getUniformLoc("light_pos");
+    GLuint lightColLoc = getUniformLoc("light_col");
+
+    glUniform4fv(lightPosLoc, 1, glm::value_ptr(lightSource->position()));
+    glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource->color()));
 }
 
 void PhongShaderProgram::initUniforms() {

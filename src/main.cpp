@@ -1,8 +1,8 @@
-#include "Renderer.h"
 #include "Camera.h"
 #include "FboHandler.h"
 #include "Utils.h"
 #include "PhongShaderProgram.h"
+#include "PassThroughShaderProgram.h"
 
 #include <stdio.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,8 +21,13 @@ int main(void)
     Shader* phongVert = new Shader("shaders/phong.vert", GL_VERTEX_SHADER);
     Shader* phongFrag = new Shader("shaders/phong.frag", GL_FRAGMENT_SHADER);
 
-    // Initalize renderer.
-    Renderer renderer = Renderer();
+    // Create shader program with the two current shaders and make it the current program.
+    PhongShaderProgram phongProgram(phongVert, phongFrag);
+    phongProgram.use();
+
+    // Shaders not necessary anymore
+    delete phongVert;
+    delete phongFrag;
 
     // Initalize FBO:s
     FboHandler fboHandler = FboHandler();
@@ -30,14 +35,6 @@ int main(void)
 
     // Draw to window.
     fboHandler.useFBO(0);
-
-    // Create shader program with the two current shaders and make it the current program.
-    PhongShaderProgram phongProgram(phongVert, phongFrag);
-    renderer.buildShaderProgram(&phongProgram);
-    renderer.useProgram(phongProgram);
-
-    delete phongVert;
-    delete phongFrag;
 
     // Load in model.
     int const AMOUNT_MODELS = 2;
@@ -55,7 +52,7 @@ int main(void)
 
     LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.5, 0.0));
     
-    renderer.initLightSource(lightSource);
+    phongProgram.initLightSource(&lightSource);
     
     while(!window.isClosed()){
 
@@ -90,6 +87,5 @@ int main(void)
     }
     
     glfwTerminate();
-
     return 0;
 }
