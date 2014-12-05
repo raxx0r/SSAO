@@ -2,7 +2,7 @@
 #include "FboHandler.h"
 #include "Utils.h"
 #include "PhongShaderProgram.h"
-#include "PassThroughShaderProgram.h"
+#include "SSAOShaderProgram.h"
 
 #include <stdio.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,7 +25,7 @@ int main(void)
     PhongShaderProgram phongProgram(phongVert, phongFrag);
     phongProgram.use();
 
-    // Shaders not necessary anymore
+    // Shader pointers not necessary anymore. 
     delete phongVert;
     delete phongFrag;
 
@@ -73,8 +73,8 @@ int main(void)
     	// Draw each object
     	V = camera.getMatrix();
     	for(int i = 0; i < AMOUNT_MODELS; i++) {
-	      phongProgram.update(models[i]->getModelmatrix(),V);
-    	  glDrawArrays(GL_TRIANGLES, models[i]->getOffset(), models[i]->numVertices);
+	        phongProgram.update(models[i]->getModelmatrix(),V);
+    	    glDrawArrays(GL_TRIANGLES, models[i]->getOffset(), models[i]->numVertices);
     	}
             
         window.update();

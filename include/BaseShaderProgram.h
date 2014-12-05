@@ -13,11 +13,7 @@
 #include <glm/glm.hpp>
 
 class BaseShaderProgram {
-  protected:
 
-    GLuint programID;
-    GLuint vao;
-    
   public:
     BaseShaderProgram(Shader* vert, Shader* frag);
     virtual ~BaseShaderProgram();
@@ -34,6 +30,15 @@ class BaseShaderProgram {
     GLuint getProgramID();
     GLint getAttribLoc(std::string name);
     GLint getUniformLoc(std::string name);
+
+  protected:
+    enum attribLocations {
+        POSITION_LOC,
+        NORMAL_LOC
+    };
+
+    GLuint programID;
+    GLuint vao;
 };
 
 

@@ -3,13 +3,13 @@
 in vec3 t_normal;
 in vec4 m_position;
 
-out vec4 out_color;
-
 uniform vec4 light_pos;
 
 uniform vec3 light_col;
 uniform mat4 V;
 uniform mat4 V_inv;
+
+out vec4 out_color;
 
 struct Attenuation {
 	float constant;

@@ -4,11 +4,20 @@
 #include "BaseShaderProgram.h"
 
 class PhongShaderProgram : public BaseShaderProgram {
-private:
 
+  public:
+    PhongShaderProgram(Shader* vert, Shader* frag) : BaseShaderProgram(vert, frag) {};
+    ~PhongShaderProgram();
+    
+    void update(glm::mat4 modelMat, glm::mat4 viewMat);
+    void initUniforms();
+    void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0);
+    void initLightSource(const LightSource* lightSource);     
+
+  private:
     enum vboIndices {
-    	POSITION_VBO,
-    	NORMAL_VBO
+        POSITION_VBO,
+        NORMAL_VBO
     };
     
     GLuint vbo[2];
@@ -30,15 +39,6 @@ private:
 
     // Normal matrix
     glm::mat3 N;
-    
-public:
-    PhongShaderProgram(Shader* vert, Shader* frag) : BaseShaderProgram(vert, frag) {};
-    ~PhongShaderProgram();
-    
-    void update(glm::mat4 modelMat, glm::mat4 viewMat);
-    void initUniforms();
-    void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0);
-    void initLightSource(const LightSource* lightSource);     
 };
 
 #endif // PHONG_SHADER_PROGRAM_H

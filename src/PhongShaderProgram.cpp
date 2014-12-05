@@ -66,9 +66,7 @@ void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     glGenBuffers(2, vbo);
     offset = 0;
     
-    long bufferSize = 0;
-    GLuint posLoc = getAttribLoc("position");
-    GLuint normLoc = getAttribLoc("normal");    
+    long bufferSize = 0; 
 
     // Calculate the buffer size
     for(int i = 0; i < AMOUNT_MODELS; i++) {
@@ -90,15 +88,15 @@ void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
         glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
         glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->vertices);
       
-        glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
-        glEnableVertexAttribArray(posLoc);
+        glVertexAttribPointer(POSITION_LOC, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+        glEnableVertexAttribArray(POSITION_LOC);
       
         // Normal buffer
         glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
         glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->normals);
       
-        glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
-        glEnableVertexAttribArray(normLoc);
+        glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
+        glEnableVertexAttribArray(NORMAL_LOC);
       
         m[i]->setOffset(offset / (3.0 * sizeof(float)));
       
@@ -107,9 +105,9 @@ void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
       
     // Set attribute pointer to first object
     glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
-    glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(posLoc);
+    glVertexAttribPointer(POSITION_LOC, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(POSITION_LOC);
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
-    glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(normLoc);
+    glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(NORMAL_LOC);
 }
