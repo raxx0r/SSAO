@@ -14,10 +14,6 @@ BaseShaderProgram::BaseShaderProgram(Shader* vert, Shader* frag) {
     glBindVertexArray(vao); 
 }
     
-void BaseShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat) {
-
-}
-
 void BaseShaderProgram::bindFragDataLocation(GLint colorAttachment, std::string name) {
     glBindFragDataLocation(programID, colorAttachment, name.c_str());
 }

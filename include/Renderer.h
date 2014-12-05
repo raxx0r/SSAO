@@ -17,4 +17,4 @@ class Renderer {
     virtual ~Renderer();
 };
 
-#endif
+#endif // RENDERER_H

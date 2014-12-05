@@ -1,3 +1,6 @@
+#ifndef MODEL_H
+#define MODEL_H
+
 #include <string>
 #include <assimp/scene.h>    
 
@@ -21,3 +24,5 @@ class Model {
 	  glm::mat4 modelmatrix;
 	  long offset;
 };
+
+#endif // MODEL_H

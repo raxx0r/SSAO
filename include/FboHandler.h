@@ -26,4 +26,4 @@ class FboHandler {
   	bool checkFramebufferStatus();
 };
 
-#endif 
+#endif // FBO_HANDLER_H

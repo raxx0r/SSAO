@@ -11,4 +11,4 @@ class Utils {
     }
 };
 
-#endif
+#endif // UTILS_H

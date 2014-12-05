@@ -20,4 +20,4 @@ class Camera {
 	  GLfloat _rotateSpeed;
 };
 
-#endif 
+#endif // CAMERA_H

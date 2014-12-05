@@ -23,4 +23,4 @@ class LightSource {
     virtual ~LightSource();
 };
 
-#endif
+#endif // LIGHT_SOURCE_H

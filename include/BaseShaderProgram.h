@@ -21,8 +21,7 @@ class BaseShaderProgram {
     BaseShaderProgram(Shader* vert, Shader* frag);
     virtual ~BaseShaderProgram();
     
-    void update(glm::mat4 modelMat, glm::mat4 viewMat);
-    void initUniforms() {};
+    virtual void initUniforms() = 0;
     void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0);
     void bindFragDataLocation(GLint colorAttachment, std::string name);
     void attachShader(Shader* shader);
