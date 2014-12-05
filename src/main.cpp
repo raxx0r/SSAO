@@ -5,6 +5,7 @@
 #include "SSAOShaderProgram.h"
 
 #include <stdio.h>
+#include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 
 enum WindowSize {
@@ -43,16 +44,15 @@ int main(void)
     // Draw to window.
     fboHandler.useFBO(0);
 
-    // Load in model.
-    int const AMOUNT_MODELS = 2;
-    Model* models[AMOUNT_MODELS]; 
+    std::vector<Model*> models;
+
     Model* teapot = new Model("models/teapot.obj");
     Model* sphere = new Model("models/sphere.obj");
-    models[0] = teapot;
-    models[1] = sphere;
+    models.push_back(teapot);
+    models.push_back(sphere);
     
     // Setup VAO, VBO and Uniforms.
-    phongProgram.initBuffers(models, AMOUNT_MODELS);
+    phongProgram.initBuffers(&models);
     phongProgram.initUniforms();
 
     ssaoProgram.initBuffers();
@@ -63,14 +63,13 @@ int main(void)
     phongProgram.initLightSource(&lightSource);
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
-    ssaoProgram.use();
+    phongProgram.use();
     while (!window.isClosed()) {
 
-     //    float time = glfwGetTime();
+        float time = glfwGetTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
-
-        /* 
+        
     	// Set movement of object
         M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
         M = glm::translate(M, glm::vec3(15.0, 0.0, 0.0));
@@ -83,20 +82,19 @@ int main(void)
 
     	// Draw each object
     	V = camera.getMatrix();
-    	for(int i = 0; i < AMOUNT_MODELS; i++) {
-	        phongProgram.update(models[i]->getModelmatrix(), V);
-    	    glDrawArrays(GL_TRIANGLES, models[i]->getOffset(), models[i]->numVertices);
+    	for (auto &m : models) {
+	        phongProgram.update(m->getModelmatrix(), V);
+    	    glDrawArrays(GL_TRIANGLES, m->getOffset(), m->numVertices);
     	}
-        */
         
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         window.update();
         camera.update(window);
     }
 
     // Cleanup
-    for (int i = 0; i < AMOUNT_MODELS; i++) {
-	   delete models[i];
+    for (auto &m : models) {
+        delete m;
     }
     
     glfwTerminate();

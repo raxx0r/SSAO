@@ -11,7 +11,7 @@ class SSAOShaderProgram : public BaseShaderProgram {
     void update();
     void use();
     void initUniforms();
-    void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0); 
+    void initBuffers(std::vector<Model*> *models = nullptr); 
 
   private:
     GLuint vbo;

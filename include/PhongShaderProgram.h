@@ -12,7 +12,7 @@ class PhongShaderProgram : public BaseShaderProgram {
     void update(glm::mat4 modelMat, glm::mat4 viewMat);
     void use();
     void initUniforms();
-    void initBuffers(Model* m[] = NULL, const int AMOUNT_MODELS = 0);
+    void initBuffers(std::vector<Model*> *models = nullptr);
     void initLightSource(const LightSource* lightSource);     
 
   private:

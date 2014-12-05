@@ -3,7 +3,7 @@ CC = g++
 ODIR = build
 SDIR = src
 INC = -Iinclude
-CFLAGS = -c -Wall 
+CFLAGS = -c -Wall -std=c++11 
 
 OS_NAME := $(shell uname -s)
 

@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -19,7 +20,7 @@ class BaseShaderProgram {
     virtual ~BaseShaderProgram();
     
     virtual void initUniforms() = 0;
-    virtual void initBuffers(Model* m[], const int AMOUNT_MODELS) = 0;
+    virtual void initBuffers(std::vector<Model*> *vec) = 0;
     virtual void initLightSource(const LightSource* lightSource) {};
     virtual void use();
 

@@ -77,7 +77,12 @@ void PhongShaderProgram::initUniforms() {
 }
 
 // Init buffers for rendering. 
-void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
+void PhongShaderProgram::initBuffers(std::vector<Model*> *models) {
+
+    if (models == nullptr) {
+        std::cerr << "ERROR: No model used in initBuffers for Phong shader." << std::endl;
+        return;
+    }
 
     glBindVertexArray(vao);
 
@@ -87,9 +92,8 @@ void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     
     long bufferSize = 0; 
 
-    // Calculate the buffer size
-    for(int i = 0; i < AMOUNT_MODELS; i++) {
-        bufferSize += 3.0 * sizeof(float) * m[i]->numVertices;
+    for (auto &m : *models) {
+        bufferSize += 3.0 * sizeof(float) * m->numVertices;
     }
     
     // Give specified size to position buffer
@@ -100,26 +104,26 @@ void PhongShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
     glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
     
-    for(int i = 0; i < AMOUNT_MODELS; i++) {
-        long size = 3.0 * sizeof(float) * m[i]->numVertices;
+     for (auto &m : *models) {
+        long size = 3.0 * sizeof(float) * m->numVertices;
       
         // Position buffer
         glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
-        glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->vertices);
+        glBufferSubData(GL_ARRAY_BUFFER, offset, size, m->vertices);
       
         glVertexAttribPointer(POSITION_LOC, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
         glEnableVertexAttribArray(POSITION_LOC);
       
         // Normal buffer
         glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
-        glBufferSubData(GL_ARRAY_BUFFER, offset, size, m[i]->normals);
+        glBufferSubData(GL_ARRAY_BUFFER, offset, size, m->normals);
       
         glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 0, (void*)(offset));
         glEnableVertexAttribArray(NORMAL_LOC);
       
-        m[i]->setOffset(offset / (3.0 * sizeof(float)));
+        m->setOffset(offset / (3.0 * sizeof(float)));
       
-        offset += 3.0 * sizeof(float) * m[i]->numVertices;
+        offset += 3.0 * sizeof(float) * m->numVertices;
     }
       
     // Set attribute pointer to first object

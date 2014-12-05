@@ -26,7 +26,7 @@ void SSAOShaderProgram::use() {
 }
 
 // Init buffers for rendering. 
-void SSAOShaderProgram::initBuffers(Model* m[], const int AMOUNT_MODELS) {
+void SSAOShaderProgram::initBuffers(std::vector<Model*> *vec) {
 
     glBindVertexArray(vao);
 
