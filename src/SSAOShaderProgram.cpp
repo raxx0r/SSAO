@@ -3,8 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 SSAOShaderProgram::~SSAOShaderProgram() {
-    BaseShaderProgram::~BaseShaderProgram();
-    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(3, vbo);
 }
 
 void SSAOShaderProgram::update() { 
@@ -31,23 +30,36 @@ void SSAOShaderProgram::initBuffers(std::vector<Model*> *vec) {
     glBindVertexArray(vao);
 
     // Initialize vbo
-    glGenBuffers(1, &vbo);   
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glGenBuffers(3, vbo);   
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 
     float vertices[] = {
-        -0.5f,  0.5f, 0.0,
-        -0.5f, -0.5f, 0.0,
-         0.5f, -0.5f, 0.0,
-         0.5f, 0.5f, 0.0
+        -1.0f,  1.0f, 0.0,
+        -1.0f, -1.0f, 0.0,
+         1.0f, -1.0f, 0.0,
+         1.0f, 1.0f, 0.0
     };
-  
+    
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+    
     glVertexAttribPointer(POSITION_LOC, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(POSITION_LOC);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    
+    float texCoords[]  = {
+	0.0f, 1.0f,
+	0.0f, 0.0f,
+	1.0f, 0.0f,
+	1.0f, 1.0f,
+    };
+    
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glVertexAttribPointer(TEXCOORD_LOC, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(TEXCOORD_LOC);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
 
     GLuint elements[] = {
         0, 1, 3, 3, 1, 2

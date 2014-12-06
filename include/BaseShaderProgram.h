@@ -35,7 +35,8 @@ class BaseShaderProgram {
   protected:
     enum attribLocations {
         POSITION_LOC,
-        NORMAL_LOC
+        NORMAL_LOC,
+	TEXCOORD_LOC
     };
 
     GLuint programID;

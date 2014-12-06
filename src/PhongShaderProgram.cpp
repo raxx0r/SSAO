@@ -3,7 +3,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 PhongShaderProgram::~PhongShaderProgram() {
-    BaseShaderProgram::~BaseShaderProgram();
     glDeleteBuffers(2, vbo);
 }
 

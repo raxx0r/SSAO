@@ -69,26 +69,30 @@ int main(void)
     while (!window.isClosed()) {
 
         // float time = glfwGetTime();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
+      
+        /* 
+    	//Set movement of object
+        M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
+        M = glm::translate(M, glm::vec3(15.0, 0.0, 0.0));
+        M = glm::rotate(M, Utils::degToRad(90.0), glm::vec3(0.0, 1.0, 0.0));
+        teapot->setModelmatrix(M);
         
-    	// Set movement of object
-     //    M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
-     //    M = glm::translate(M, glm::vec3(15.0, 0.0, 0.0));
-     //    M = glm::rotate(M, Utils::degToRad(90.0), glm::vec3(0.0, 1.0, 0.0));
-     //    teapot->setModelmatrix(M);
-        
-     //    M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
-     //    M = glm::translate(M, glm::vec3(-15.0, 5.0, 0.0));
-    	// sphere->setModelmatrix(M);
+        M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
+        M = glm::translate(M, glm::vec3(-15.0, 5.0, 0.0));
+    	sphere->setModelmatrix(M);
 
-    	// // Draw each object
-    	// V = camera.getMatrix();
-    	// for (auto &m : models) {
-	    //     phongProgram.update(m->getModelmatrix(), V);
-    	//     glDrawArrays(GL_TRIANGLES, m->getOffset(), m->numVertices);
-    	// }
+    	// Draw each object
+    	V = camera.getMatrix();
+    	for (auto &m : models) {
+	        phongProgram.update(m->getModelmatrix(), V);
+    	    glDrawArrays(GL_TRIANGLES, m->getOffset(), m->numVertices);
+    	}
+        */
         
+        ssaoProgram.use();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         window.update();
         camera.update(window);
