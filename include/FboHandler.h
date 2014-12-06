@@ -7,7 +7,7 @@
 
 /// Container struct for fbos. 
 typedef struct FBOstruct {
-	GLuint fb;
+	GLuint index;
 	GLuint rb;
 	GLuint tex;
 	GLint width;
@@ -17,7 +17,7 @@ typedef struct FBOstruct {
 class FboHandler {
   public:
   	FboHandler();
-  	GLuint initFBO(GLint width, GLint height);
+  	void initFBO(FBOstruct& fbo, GLint width, GLint height);
     void useFBO(GLuint fboindex);
   	virtual ~FboHandler();
 
