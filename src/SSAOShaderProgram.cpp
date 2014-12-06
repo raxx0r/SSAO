@@ -48,10 +48,10 @@ void SSAOShaderProgram::initBuffers(std::vector<Model*> *vec) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     
     float texCoords[]  = {
-	0.0f, 1.0f,
-	0.0f, 0.0f,
-	1.0f, 0.0f,
-	1.0f, 1.0f,
+    	0.0f, 1.0f,
+    	0.0f, 0.0f,
+    	1.0f, 0.0f,
+    	1.0f, 1.0f,
     };
     
     glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
