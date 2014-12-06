@@ -8,8 +8,8 @@
 /// Container struct for fbos. 
 typedef struct FBOstruct {
 	GLuint index;
-	GLuint rb;
-	GLuint tex;
+	GLuint depth;
+	GLuint texids[3];  // Original, Normals, Textures
 	GLint width;
 	GLint height;
 } FBOstruct;
@@ -22,7 +22,6 @@ class FboHandler {
   	virtual ~FboHandler();
 
   private:
-  	void setupRenderTexture(FBOstruct& fbo);
   	bool checkFramebufferStatus();
 };
 

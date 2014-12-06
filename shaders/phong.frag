@@ -10,6 +10,8 @@ uniform mat4 V;
 uniform mat4 V_inv;
 
 out vec4 out_color;
+out vec3 out_normal;
+out vec4 out_position;
 
 struct Attenuation {
 	float constant;
@@ -67,4 +69,6 @@ void main() {
 	}
 
 	out_color = vec4(diffuse + specular, 1.0);
+	out_normal = mv_normal;
+	out_position = mv_position;
 }

@@ -54,8 +54,6 @@ int main(void)
     // Setup lightsource for Phong.
     LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.5, 0.0));
     phongProgram.initLightSource(&lightSource);
-    phongProgram.use();
-    // ssaoProgram.use();
     
     // Initalize FBO:s
     FBOstruct fbo1;
@@ -72,7 +70,7 @@ int main(void)
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
       
          
-    	//Set movement of object
+    	// Set movement of object
         M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
         M = glm::translate(M, glm::vec3(15.0, 0.0, 0.0));
         M = glm::rotate(M, Utils::degToRad(90.0), glm::vec3(0.0, 1.0, 0.0));
@@ -91,7 +89,7 @@ int main(void)
 
         ssaoProgram.use();
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, fbo1.tex);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
         glUniform1i(ssaoProgram.getUniformLoc("tex"), 0);
 
         fboHandler.useFBO(0);
@@ -105,8 +103,8 @@ int main(void)
         delete m;
     }
 
-    glDeleteTextures(1, &fbo1.tex);
-    glDeleteBuffers(1, &fbo1.rb);
+    glDeleteTextures(3, fbo1.texids);
+    glDeleteBuffers(1, &fbo1.depth);
     glDeleteBuffers(1, &fbo1.index);
     
     glfwTerminate();

@@ -17,33 +17,41 @@ void FboHandler::initFBO(FBOstruct& fbo, GLint width, GLint height) {
 	// Setup framebuffer
 	glGenFramebuffers(1, &fbo.index);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo.index);
+	glGenTextures(3, fbo.texids);
 
-	// Setup texture
-	setupRenderTexture(fbo);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fbo.tex, 0);
+	// Setup textures that stores output from phong.	
+	glBindTexture(GL_TEXTURE_2D, fbo.texids[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fbo.texids[0], 0);
+
+	// Setup texture that stores normals.
+	glBindTexture(GL_TEXTURE_2D, fbo.texids[1]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, fbo.texids[1], 0);
+
+	// Setup texture that stores positions.
+	glBindTexture(GL_TEXTURE_2D, fbo.texids[2]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, fbo.texids[2], 0);
 
 	// Setup depthbuffer.
-	glGenRenderbuffers(1, &fbo.rb);
-	glBindRenderbuffer(GL_RENDERBUFFER, fbo.rb);
+	glGenRenderbuffers(1, &fbo.depth);
+	glBindRenderbuffer(GL_RENDERBUFFER, fbo.depth);
 
 	// Attach renderbuffer to framebuffer
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbo.width, fbo.height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbo.rb);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbo.depth);
 
-	GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-	glDrawBuffers(1, DrawBuffers);
+	GLenum drawbuffers[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+	glDrawBuffers(3, drawbuffers);
 
 	checkFramebufferStatus();
-}
-
-/// Create a texture which we can render to.
-void FboHandler::setupRenderTexture(FBOstruct& fbo) {
-	glGenTextures(1, &fbo.tex);
-	glBindTexture(GL_TEXTURE_2D, fbo.tex);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fbo.width, fbo.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
 /// Checks if anything wrong has happened to the framebuffer.
