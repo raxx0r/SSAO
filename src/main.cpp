@@ -26,10 +26,13 @@ int main(void)
     Shader* ssaoVert = new Shader("shaders/ssao.vert", GL_VERTEX_SHADER);
     Shader* ssaoFrag = new Shader("shaders/ssao.frag", GL_FRAGMENT_SHADER);
 
-    // Create shader program with the two current shaders and make it the current program.
-    PhongShaderProgram phongProgram(phongVert, phongFrag);
+    // Setup SSAO program.
     SSAOShaderProgram ssaoProgram(ssaoVert, ssaoFrag);
-    phongProgram.use();
+    ssaoProgram.initBuffers();
+    ssaoProgram.initUniforms();
+
+    // Setup Phong program.
+    PhongShaderProgram phongProgram(phongVert, phongFrag);
 
     // Shader pointers not necessary anymore. 
     delete phongVert;
@@ -55,15 +58,13 @@ int main(void)
     phongProgram.initBuffers(&models);
     phongProgram.initUniforms();
 
-    ssaoProgram.initBuffers();
-    ssaoProgram.initUniforms();
-
     // Setup lightsource for Phong.
     LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.5, 0.0));
     phongProgram.initLightSource(&lightSource);
+    phongProgram.use();
+    //ssaoProgram.use();
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
-    phongProgram.use();
     while (!window.isClosed()) {
 
         float time = glfwGetTime();

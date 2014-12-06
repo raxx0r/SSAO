@@ -73,7 +73,7 @@ void PhongShaderProgram::initUniforms() {
     glUniformMatrix4fv(vInvLoc, 1, GL_FALSE, glm::value_ptr(vInv));
     glUniformMatrix3fv(nLoc, 1, GL_FALSE, glm::value_ptr(N));
 
-    glBindVertexArray(0);
+    // glBindVertexArray(0);
 }
 
 // Init buffers for rendering. 
@@ -98,11 +98,11 @@ void PhongShaderProgram::initBuffers(std::vector<Model*> *models) {
     
     // Give specified size to position buffer
     glBindBuffer(GL_ARRAY_BUFFER, vbo[POSITION_VBO]);
-    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, nullptr, GL_STATIC_DRAW);
     
     // Give specified size to normal buffer
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
-    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, NULL, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3.0 * sizeof(float) * bufferSize, nullptr, GL_STATIC_DRAW);
     
      for (auto &m : *models) {
         long size = 3.0 * sizeof(float) * m->numVertices;
@@ -133,7 +133,4 @@ void PhongShaderProgram::initBuffers(std::vector<Model*> *models) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[NORMAL_VBO]);
     glVertexAttribPointer(NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(NORMAL_LOC);
-    
-    // Unbind
-    glBindVertexArray(0);
 }

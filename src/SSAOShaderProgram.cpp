@@ -54,5 +54,4 @@ void SSAOShaderProgram::initBuffers(std::vector<Model*> *vec) {
     };
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
-    glBindVertexArray(0);
 }
