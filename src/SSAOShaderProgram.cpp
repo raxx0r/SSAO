@@ -19,9 +19,13 @@ void SSAOShaderProgram::initUniforms() {
 void SSAOShaderProgram::use() {
     BaseShaderProgram::use();
     glDisable(GL_DEPTH_TEST);
-
+    
     // Don't draw triangles with faces away from camera.
     glDisable(GL_CULL_FACE);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fbo->tex);
+    glUniform1i(getUniformLoc("tex"), 0);
 }
 
 // Init buffers for rendering. 

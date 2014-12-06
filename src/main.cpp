@@ -18,6 +18,11 @@ int main(void)
     Window window = Window(WIDTH, HEIGHT, "Screen Space Ambient Occlusion");
     Camera camera = Camera();
 
+    // Initalize FBO:s
+    FBOstruct fbo1;
+    FboHandler fboHandler = FboHandler();
+    fboHandler.initFBO(fbo1, WIDTH, HEIGHT);
+    
     // Create shaders for Phong.
     Shader* phongVert = new Shader("shaders/phong.vert", GL_VERTEX_SHADER);
     Shader* phongFrag = new Shader("shaders/phong.frag", GL_FRAGMENT_SHADER);
@@ -27,7 +32,7 @@ int main(void)
     Shader* ssaoFrag = new Shader("shaders/ssao.frag", GL_FRAGMENT_SHADER);
 
     // Setup SSAO program.
-    SSAOShaderProgram ssaoProgram(ssaoVert, ssaoFrag);
+    SSAOShaderProgram ssaoProgram(ssaoVert, ssaoFrag, &fbo1);
     ssaoProgram.initBuffers();
     ssaoProgram.initUniforms();
 
@@ -55,12 +60,6 @@ int main(void)
     LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.5, 0.0));
     phongProgram.initLightSource(&lightSource);
     phongProgram.use();
-    // ssaoProgram.use();
-    
-    // Initalize FBO:s
-    FBOstruct fbo1;
-    FboHandler fboHandler = FboHandler();
-    fboHandler.initFBO(fbo1, WIDTH, HEIGHT);
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
     while (!window.isClosed()) {
@@ -90,9 +89,6 @@ int main(void)
     	}
 
         ssaoProgram.use();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, fbo1.tex);
-        glUniform1i(ssaoProgram.getUniformLoc("tex"), 0);
 
         fboHandler.useFBO(0);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -106,8 +102,8 @@ int main(void)
     }
 
     glDeleteTextures(1, &fbo1.tex);
-    glDeleteBuffers(1, &fbo1.rb);
-    glDeleteBuffers(1, &fbo1.index);
+    //glDeleteBuffers(1, &fbo1.rb);
+    //glDeleteBuffers(1, &fbo1.index);
     
     glfwTerminate();
     return 0;
