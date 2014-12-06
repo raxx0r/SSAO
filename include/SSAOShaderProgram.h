@@ -14,8 +14,7 @@ class SSAOShaderProgram : public BaseShaderProgram {
     void initBuffers(std::vector<Model*> *models = nullptr); 
 
   private:
-    GLuint vbo;
-    GLuint ebo;
+    GLuint vbo[3];
 };
 
 #endif // SSAO_SHADER_PROGRAM_H
