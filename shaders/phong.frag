@@ -70,6 +70,6 @@ void main() {
 		specular = attenuation * light_col * pow(max(0.0, dot(normalize(reflect(-v_light_direction, mv_normal)), v_view_direction)), 20.0f);
 	}
 
-	out_color = vec4(diffuse, 1.0);
+	out_color = vec4(diffuse+specular, 1.0);
 
 }

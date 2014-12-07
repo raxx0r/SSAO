@@ -24,6 +24,8 @@ class PhongShaderProgram : public BaseShaderProgram {
     
     glm::mat4 V;
 
+    glm::vec4 lightDirection;
+
 };
 
 #endif // PHONG_SHADER_PROGRAM_H

@@ -20,13 +20,18 @@ void PhongShaderProgram::update(glm::mat4 viewMat){
     // Find GPU locations
     GLuint vInvLoc = getUniformLoc("V_inv");
     GLuint vLoc = getUniformLoc("V");
+    GLuint lightPosLoc = getUniformLoc("light_pos");
 
     vInv = glm::inverse(viewMat);
     V = viewMat;
 
+    glm::vec4 Vlight = viewMat * lightDirection;
+
     // Send data to GPU
     glUniformMatrix4fv(vInvLoc, 1, GL_FALSE, glm::value_ptr(vInv));
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(V));
+
+    glUniform4fv(lightPosLoc, 1, glm::value_ptr(Vlight));
 
 }
 
@@ -38,7 +43,9 @@ void PhongShaderProgram::initLightSource(const LightSource* lightSource) {
     GLuint lightColLoc = getUniformLoc("light_col");
 
     // Transform light coords from view to coordinates
-    glm::vec4 Vlight = V * lightSource->position();
+    lightDirection = lightSource->position();
+    glm::vec4 Vlight = V * lightDirection;
+
 
     glUniform4fv(lightPosLoc, 1, glm::value_ptr(Vlight));
     glUniform3fv(lightColLoc, 1, glm::value_ptr(lightSource->color()));
