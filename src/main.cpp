@@ -2,6 +2,7 @@
 #include "FboHandler.h"
 #include "Utils.h"
 #include "PhongShaderProgram.h"
+#include "DeferredShaderProgram.h"
 #include "SSAOShaderProgram.h"
 
 #include <stdio.h>
@@ -19,8 +20,8 @@ int main(void)
     Camera camera = Camera();
 
     // Create shaders for Phong.
-    Shader* phongVert = new Shader("shaders/phong.vert", GL_VERTEX_SHADER);
-    Shader* phongFrag = new Shader("shaders/phong.frag", GL_FRAGMENT_SHADER);
+    Shader* deferredVert = new Shader("shaders/deferred.vert", GL_VERTEX_SHADER);
+    Shader* deferredFrag = new Shader("shaders/deferred.frag", GL_FRAGMENT_SHADER);
 
     // Create shaders for SSAO.
     Shader* ssaoVert = new Shader("shaders/ssao.vert", GL_VERTEX_SHADER);
@@ -32,11 +33,11 @@ int main(void)
     ssaoProgram.initUniforms();
 
     // Setup Phong program.
-    PhongShaderProgram phongProgram(phongVert, phongFrag);
+    DeferredShaderProgram deferredProgram(deferredVert, deferredFrag);
 
     // Shader pointers not necessary anymore. 
-    delete phongVert;
-    delete phongFrag;
+    delete deferredVert;
+    delete deferredFrag;
     delete ssaoVert;
     delete ssaoFrag;
 
@@ -51,12 +52,12 @@ int main(void)
     models.push_back(sphere);
     
     // Setup VAO, VBO and Uniforms.
-    phongProgram.initBuffers(&models);
-    phongProgram.initUniforms();
+    deferredProgram.initBuffers(&models);
+    deferredProgram.initUniforms();
 
     // Setup lightsource for Phong.
-    LightSource lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 1.0), glm::vec3(1.0, 1.0, 1.0));
-    phongProgram.initLightSource(&lightSource);
+    //LightSource lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 1.0), glm::vec3(1.0, 1.0, 1.0));
+    //phongProgram.initLightSource(&lightSource);
     
     // Initalize FBO:s
     FBOstruct fbo1;
@@ -66,7 +67,7 @@ int main(void)
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
     while (!window.isClosed()) {
-        phongProgram.use();
+        deferredProgram.use();
         fboHandler.useFBO(fbo1.index);
         // float time = glfwGetTime();
 
@@ -89,14 +90,14 @@ int main(void)
     	// Draw each object
     	V = camera.getMatrix();
     	for (auto &m : models) {
-	        phongProgram.update(m->getModelmatrix(), V);
+	        deferredProgram.update(m->getModelmatrix(), V);
     	    glDrawArrays(GL_TRIANGLES, m->getOffset(), m->numVertices);
     	}
 
         ssaoProgram.use();
         glActiveTexture(GL_TEXTURE0);
         glUniform1i(ssaoProgram.getUniformLoc("tex"), 0);
-        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
 
         fboHandler.useFBO(0);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
