@@ -19,25 +19,39 @@ int main(void)
     Window window = Window(WIDTH, HEIGHT, "Screen Space Ambient Occlusion");
     Camera camera = Camera();
 
-    // Create shaders for Phong.
+    // Create shaders for Deferred.
     Shader* deferredVert = new Shader("shaders/deferred.vert", GL_VERTEX_SHADER);
     Shader* deferredFrag = new Shader("shaders/deferred.frag", GL_FRAGMENT_SHADER);
+
+    // Create shaders for Phong.
+    Shader* phongVert = new Shader("shaders/phong.vert", GL_VERTEX_SHADER);
+    Shader* phongFrag = new Shader("shaders/phong.frag", GL_FRAGMENT_SHADER);
 
     // Create shaders for SSAO.
     Shader* ssaoVert = new Shader("shaders/ssao.vert", GL_VERTEX_SHADER);
     Shader* ssaoFrag = new Shader("shaders/ssao.frag", GL_FRAGMENT_SHADER);
 
+
+    PhongShaderProgram phongProgram(phongVert, phongFrag);
+    phongProgram.use();
+    phongProgram.initBuffers();
+    phongProgram.initUniforms();
+
     // Setup SSAO program.
     SSAOShaderProgram ssaoProgram(ssaoVert, ssaoFrag);
+    ssaoProgram.use();
     ssaoProgram.initBuffers();
     ssaoProgram.initUniforms();
 
     // Setup Phong program.
     DeferredShaderProgram deferredProgram(deferredVert, deferredFrag);
+    deferredProgram.use();
 
     // Shader pointers not necessary anymore. 
     delete deferredVert;
     delete deferredFrag;
+    delete phongVert;
+    delete phongFrag;
     delete ssaoVert;
     delete ssaoFrag;
 
@@ -56,8 +70,9 @@ int main(void)
     deferredProgram.initUniforms();
 
     // Setup lightsource for Phong.
-    //LightSource lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 1.0), glm::vec3(1.0, 1.0, 1.0));
-    //phongProgram.initLightSource(&lightSource);
+    LightSource lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 1.0), glm::vec3(1.0, 1.0, 1.0));
+    phongProgram.use();
+    phongProgram.initLightSource(&lightSource);
     
     // Initalize FBO:s
     FBOstruct fbo1;
@@ -94,9 +109,14 @@ int main(void)
     	    glDrawArrays(GL_TRIANGLES, m->getOffset(), m->numVertices);
     	}
 
-        ssaoProgram.use();
+        phongProgram.use();
+        phongProgram.update(V);
         glActiveTexture(GL_TEXTURE0);
-        glUniform1i(ssaoProgram.getUniformLoc("tex"), 0);
+        glUniform1i(ssaoProgram.getUniformLoc("normal_tex"), 0);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
+
+        glActiveTexture(GL_TEXTURE1);
+        glUniform1i(phongProgram.getUniformLoc("position_tex"), 1);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
 
         fboHandler.useFBO(0);

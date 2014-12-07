@@ -1,17 +1,17 @@
 #version 330 core
 
-in vec3 t_normal;
-in vec4 m_position;
+in vec2 tex_coords;
+
+uniform sampler2D position_tex;
+uniform sampler2D normal_tex;
 
 uniform vec4 light_pos;
-
 uniform vec3 light_col;
+
 uniform mat4 V;
 uniform mat4 V_inv;
 
 layout (location = 0) out vec4 out_color;
-layout (location = 1) out vec3 out_normal;
-layout (location = 2) out vec4 out_position;
 
 struct Attenuation {
 	float constant;
@@ -31,11 +31,13 @@ void main() {
 	// These values might need to be tweaked but I'll leave
 	// them like this for now.
 	Attenuation att = Attenuation(0.7, 0.05, 0.01);
-	vec3 mv_normal = normalize(t_normal);
-	vec4 mv_position = V * m_position;
 
-	// Light direction in view coordinates.
-	vec4 v_light_position = V * light_pos;
+	vec3 mv_normal = texture(normal_tex, tex_coords).xyz;
+
+	vec4 mv_position = texture(position_tex, tex_coords);
+	vec4 m_position = V_inv * mv_position;
+
+	vec4 v_light_position = light_pos;
 
 	// Camera position in model coordinates.
 	vec4 camera_position = V_inv * vec4(0.0, 0.0, 0.0, 1.0);
@@ -68,7 +70,6 @@ void main() {
 		specular = attenuation * light_col * pow(max(0.0, dot(normalize(reflect(-v_light_direction, mv_normal)), v_view_direction)), 20.0f);
 	}
 
-	out_color = vec4(diffuse + specular, 1.0);
-	out_normal = mv_normal;
-	out_position = mv_position;
+	out_color = vec4(diffuse, 1.0);
+
 }

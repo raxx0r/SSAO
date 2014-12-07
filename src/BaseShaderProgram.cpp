@@ -10,7 +10,6 @@ BaseShaderProgram::BaseShaderProgram(Shader* vert, Shader* frag) {
     
     // Initialize vao
     glGenVertexArrays(1, &vao);
-    use();
 }
     
 void BaseShaderProgram::bindFragDataLocation(GLint colorAttachment, std::string name) {
