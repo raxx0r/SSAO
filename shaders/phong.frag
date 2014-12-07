@@ -9,9 +9,9 @@ uniform vec3 light_col;
 uniform mat4 V;
 uniform mat4 V_inv;
 
-out vec4 out_color;
-out vec3 out_normal;
-out vec4 out_position;
+layout (location = 0) out vec4 out_color;
+layout (location = 1) out vec3 out_normal;
+layout (location = 2) out vec4 out_position;
 
 struct Attenuation {
 	float constant;

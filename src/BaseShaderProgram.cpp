@@ -6,9 +6,6 @@ BaseShaderProgram::BaseShaderProgram(Shader* vert, Shader* frag) {
     // Attach two shaders and links them together to create a ShaderProgram
     attachShader(vert); 
     attachShader(frag);
-    bindFragDataLocation(0, "out_color");
-    bindFragDataLocation(1, "out_normal");
-    bindFragDataLocation(2, "out_position");
     link();
     
     // Initialize vao

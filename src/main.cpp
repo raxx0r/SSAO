@@ -43,8 +43,11 @@ int main(void)
     std::vector<Model*> models;
 
     Model* teapot = new Model("models/teapot.obj");
+    Model* teapot2 = new Model("models/teapot.obj");
     Model* sphere = new Model("models/sphere.obj");
+
     models.push_back(teapot);
+    models.push_back(teapot2);
     models.push_back(sphere);
     
     // Setup VAO, VBO and Uniforms.
@@ -52,32 +55,35 @@ int main(void)
     phongProgram.initUniforms();
 
     // Setup lightsource for Phong.
-    LightSource lightSource = LightSource::PointLightSource(glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.5, 0.0));
+    LightSource lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 1.0), glm::vec3(1.0, 1.0, 1.0));
     phongProgram.initLightSource(&lightSource);
     
     // Initalize FBO:s
     FBOstruct fbo1;
     FboHandler fboHandler = FboHandler();
     fboHandler.initFBO(fbo1, WIDTH, HEIGHT);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
     while (!window.isClosed()) {
         phongProgram.use();
         fboHandler.useFBO(fbo1.index);
-        float time = glfwGetTime();
+        // float time = glfwGetTime();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
       
          
     	// Set movement of object
-        M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
-        M = glm::translate(M, glm::vec3(15.0, 0.0, 0.0));
-        M = glm::rotate(M, Utils::degToRad(90.0), glm::vec3(0.0, 1.0, 0.0));
+        M = glm::translate(glm::mat4(), glm::vec3(15.0, 0.0, 0.0));
+        M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
         teapot->setModelmatrix(M);
+
+        M = glm::translate(glm::mat4(), glm::vec3(-15.0, 0.0, 0.0));
+        M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
+        teapot2->setModelmatrix(M);
         
-        M = glm::rotate(glm::mat4(), Utils::degToRad(10.0 * time), glm::vec3(0.0, 1.0, 0.0));
-        M = glm::translate(M, glm::vec3(-15.0, 5.0, 0.0));
+        M = glm::translate(glm::mat4(), glm::vec3(0.0, 5.0, 5.0));
     	sphere->setModelmatrix(M);
 
     	// Draw each object
@@ -89,8 +95,8 @@ int main(void)
 
         ssaoProgram.use();
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
         glUniform1i(ssaoProgram.getUniformLoc("tex"), 0);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
 
         fboHandler.useFBO(0);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
