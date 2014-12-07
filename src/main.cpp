@@ -61,7 +61,7 @@ int main(void)
     // Initalize FBO:s
     FBOstruct fbo1;
     FboHandler fboHandler = FboHandler();
-    fboHandler.initFBO(fbo1, WIDTH, HEIGHT);
+    fboHandler.initFBO(fbo1, window.getFramebufferWidth(), window.getFramebufferHeight());
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
