@@ -75,9 +75,10 @@ int main(void)
     phongProgram.initLightSource(&lightSource);
     
     // Initalize FBO:s
-    FBOstruct fbo1;
+    FBOstruct fbo1, fbo2;
     FboHandler fboHandler = FboHandler();
     fboHandler.initFBO(fbo1, window.getFramebufferWidth(), window.getFramebufferHeight());
+    fboHandler.initFBO2(fbo2, window.getFramebufferWidth(), window.getFramebufferHeight());
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
@@ -85,11 +86,8 @@ int main(void)
         deferredProgram.use();
         fboHandler.useFBO(fbo1.index);
         // float time = glfwGetTime();
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
-      
-         
     	// Set movement of object
         M = glm::translate(glm::mat4(), glm::vec3(15.0, 0.0, 0.0));
         M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
@@ -102,25 +100,48 @@ int main(void)
         M = glm::translate(glm::mat4(), glm::vec3(0.0, 5.0, 5.0));
     	sphere->setModelmatrix(M);
 
-    	// Draw each object
+    	// Draw each object 
     	V = camera.getMatrix();
     	for (auto &m : models) {
 	        deferredProgram.update(m->getModelmatrix(), V);
     	    glDrawArrays(GL_TRIANGLES, m->getOffset(), m->numVertices);
     	}
 
-        phongProgram.use();
-        phongProgram.update(V);
-        glActiveTexture(GL_TEXTURE0);
-        glUniform1i(ssaoProgram.getUniformLoc("normal_tex"), 0);
+        // Generate SSAO component
+        ssaoProgram.use();
+        fboHandler.useFBO(fbo2.index);
+        glUniform1i(ssaoProgram.getUniformLoc("normal_tex"), 1);
+        glUniform1i(ssaoProgram.getUniformLoc("position_tex"), 2);
+
+        glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
 
-        glActiveTexture(GL_TEXTURE1);
-        glUniform1i(phongProgram.getUniformLoc("position_tex"), 1);
+        glActiveTexture(GL_TEXTURE0 + 2);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
 
-        fboHandler.useFBO(0);
+        // window.swapBuffers();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Calculate lightning and display on screen.
+        phongProgram.use();
+        phongProgram.update(V);
+        fboHandler.useFBO(0);
+
+        glUniform1i(phongProgram.getUniformLoc("normal_tex"), 1);
+        glUniform1i(phongProgram.getUniformLoc("position_tex"), 2);
+        glUniform1i(phongProgram.getUniformLoc("ssao_tex"), 3);
+        
+        glActiveTexture(GL_TEXTURE0 + 1);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
+
+        glActiveTexture(GL_TEXTURE0 + 2);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
+
+        glActiveTexture(GL_TEXTURE0 + 3);
+        glBindTexture(GL_TEXTURE_2D, fbo2.texids[0]);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         window.update();
         camera.update(window);
     }
@@ -131,8 +152,13 @@ int main(void)
     }
 
     glDeleteTextures(3, fbo1.texids);
+    glDeleteTextures(3, fbo2.texids);
+
     glDeleteBuffers(1, &fbo1.depth);
     glDeleteBuffers(1, &fbo1.index);
+
+    glDeleteBuffers(1, &fbo2.depth);
+    glDeleteBuffers(1, &fbo2.index);
     
     glfwTerminate();
     return 0;

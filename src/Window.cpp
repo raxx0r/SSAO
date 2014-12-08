@@ -27,12 +27,12 @@ Window::Window(GLint width, GLint height, std::string s){
 
     _frames = 0;
     _fpsTimeElapsed = glfwGetTime();
+    _lastBufferSwapTime = 0;
+    _grabbed = false;
 }
 
 Window::~Window(){
-
     glfwDestroyWindow(window);
-
 }
 
 void Window::updateFPSCounter(){
@@ -40,35 +40,24 @@ void Window::updateFPSCounter(){
     std::stringstream ss;
 
     int type = 0;
-
-    if(type == 1){
-
-        if ( (currentTime - _fpsTimeElapsed) > 1.0){
+    if (type == 1) {
+        if ((currentTime - _fpsTimeElapsed) > 1.0) {
             double fps; 
             fps = _frames * 1.0 / (currentTime - _fpsTimeElapsed);
-            //printf("%d\n", _frames);
             _fpsTimeElapsed = currentTime;
-
             ss << "FPS: " << fps;
             _frames = 0;
             glfwSetWindowTitle(window, ss.str().c_str());
         }
-    }else{
-
-
-            if(_frames % 60 == 0){
-                ss << "FPS: " << round(1.0f / (currentTime - _fpsTimeElapsed));
-                glfwSetWindowTitle(window, ss.str().c_str());
-            }
-            _fpsTimeElapsed = currentTime;
-
-        
-        
+    } 
+    else {
+        if (_frames % 60 == 0) {
+            ss << "FPS: " << round(1.0f / (currentTime - _fpsTimeElapsed));
+            glfwSetWindowTitle(window, ss.str().c_str());
+        }
+        _fpsTimeElapsed = currentTime;
     }
-    
-
     _frames++;
-
 }
 
 void Window::update(){
@@ -83,7 +72,7 @@ void Window::update(){
     _lastBufferSwapTime = currentTime;
 
     // Mouse update
-    if(!_grabbed &&glfwGetMouseButton(window, 0)){
+    if(!_grabbed && glfwGetMouseButton(window, 0)){
         _grabbed = true;
         GLdouble x, y;
         glfwGetCursorPos(window, &x, &y);

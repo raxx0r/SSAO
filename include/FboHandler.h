@@ -18,6 +18,7 @@ class FboHandler {
   public:
   	FboHandler();
   	void initFBO(FBOstruct& fbo, GLint width, GLint height);
+    void initFBO2(FBOstruct& fbo, GLint width, GLint height);
     void useFBO(GLuint fboindex);
   	virtual ~FboHandler();
 

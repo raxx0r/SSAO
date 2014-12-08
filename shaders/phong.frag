@@ -2,8 +2,9 @@
 
 in vec2 tex_coords;
 
-uniform sampler2D position_tex;
-uniform sampler2D normal_tex;
+uniform sampler2D normal_tex,
+				  position_tex,
+				  ssao_tex;
 
 uniform vec4 light_pos;
 uniform vec3 light_col;
@@ -37,6 +38,8 @@ void main() {
 	vec4 mv_position = texture(position_tex, tex_coords);
 	vec4 m_position = V_inv * mv_position;
 
+	vec4 ssao_component = texture(ssao_tex, tex_coords);
+
 	vec4 v_light_position = light_pos;
 
 	// Camera position in model coordinates.
@@ -50,6 +53,7 @@ void main() {
 		v_light_direction = normalize(vec3(v_light_position));
 		attenuation = 1.0;
 	} else { 
+		
 		// Calculate distance from source.
 		vec3 pos_to_light = vec3(v_light_position - mv_position);
 		float distance = length(pos_to_light);
@@ -70,6 +74,5 @@ void main() {
 		specular = attenuation * light_col * pow(max(0.0, dot(normalize(reflect(-v_light_direction, mv_normal)), v_view_direction)), 20.0f);
 	}
 
-	out_color = vec4(diffuse+specular, 1.0);
-
+	out_color = vec4(diffuse + specular, 1.0);
 }

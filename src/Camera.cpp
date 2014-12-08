@@ -54,7 +54,6 @@ void Camera::update(Window& window){
     
     GLFWwindow* glfwWindow = window.getWindow();
     GLfloat deltaTime = window.getDeltaTime();
-
     
     // Calculate the rotation while moving the mouse
     if(window.isGrabbed()){
