@@ -24,6 +24,5 @@ void main() {
 	occlusion += calculateAO(P, tex_coords + pixel_size * vec2(0.0, 1.0), n);
 	occlusion += calculateAO(P, tex_coords + pixel_size * vec2(0.0, -1.0), n);
 
-
 	ssao_component = occlusion / 1.0;
 }

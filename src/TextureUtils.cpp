@@ -5,8 +5,6 @@
 GLuint TextureUtils::createTexture(const GLchar *path){
     ILuint image = ilGenImage();
     ilBindImage(image);
-   
-    std::cout << "success" << std::endl;
     ILboolean loadSuccess = ilLoadImage(path);
  
     if(!loadSuccess){
