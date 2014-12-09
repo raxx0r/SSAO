@@ -9,8 +9,6 @@
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 
-
-
 enum WindowSize {
     WIDTH = 800,
     HEIGHT = 600
@@ -18,9 +16,9 @@ enum WindowSize {
 
 int main(void)
 {
+    // Initalize window and camera
     Window window = Window(WIDTH, HEIGHT, "Screen Space Ambient Occlusion");
     Camera camera = Camera();
-
 
     // Initalize FBO:s
     FBOstruct fbo1, fbo2;
@@ -41,21 +39,19 @@ int main(void)
     Shader* ssaoVert = new Shader("shaders/ssao.vert", GL_VERTEX_SHADER);
     Shader* ssaoFrag = new Shader("shaders/ssao.frag", GL_FRAGMENT_SHADER);
 
-
+    // Setup Phong program
     PhongShaderProgram phongProgram(phongVert, phongFrag);
     phongProgram.use();
     phongProgram.initBuffers();
     phongProgram.initUniforms();
 
     // Setup SSAO program.
-
-   //SSAOShaderProgram ssaoProgram(ssaoVert, ssaoFrag, &fbo1);
     SSAOShaderProgram ssaoProgram(ssaoVert, ssaoFrag);
     ssaoProgram.use();
     ssaoProgram.initBuffers();
     ssaoProgram.initUniforms();
 
-    // Setup Phong program.
+    // Setup Deferred program.
     DeferredShaderProgram deferredProgram(deferredVert, deferredFrag);
     deferredProgram.use();
 
@@ -67,12 +63,11 @@ int main(void)
     delete ssaoVert;
     delete ssaoFrag;
 
+    // Load all models and store in vector
     std::vector<Model*> models;
-
     Model* teapot = new Model("models/teapot.obj");
     Model* teapot2 = new Model("models/teapot.obj");
     Model* sphere = new Model("models/sphere.obj");
-
     models.push_back(teapot);
     models.push_back(teapot2);
     models.push_back(sphere);
@@ -84,7 +79,6 @@ int main(void)
     // Setup lightsource for Phong.
     LightSource lightSource = LightSource::DirectionalLightSource(glm::vec3(0.0, 1.0, 1.0), glm::vec3(1.0, 1.0, 1.0));
     phongProgram.use();
-
     phongProgram.initLightSource(&lightSource);
 
 
@@ -92,25 +86,27 @@ int main(void)
     while (!window.isClosed()) {
         deferredProgram.use();
         fboHandler.useFBO(fbo1.index);
-        // float time = glfwGetTime();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
-    	// Set movement of object
+	
+    	// Set movement of teapot
         M = glm::translate(glm::mat4(), glm::vec3(15.0, 0.0, 0.0));
         M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
         teapot->setModelmatrix(M);
-
+	
+	// Set movement of teapot2
         M = glm::translate(glm::mat4(), glm::vec3(-15.0, 0.0, 0.0));
         M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
         teapot2->setModelmatrix(M);
         
+	// Set movement of sphere
         M = glm::translate(glm::mat4(), glm::vec3(0.0, 5.0, 5.0));
     	sphere->setModelmatrix(M);
 
     	// Draw each object 
     	V = camera.getMatrix();
     	for (auto &m : models) {
-	        deferredProgram.update(m->getModelmatrix(), V);
+	    deferredProgram.update(m->getModelmatrix(), V);
     	    glDrawArrays(GL_TRIANGLES, m->getOffset(), m->numVertices);
     	}
 
@@ -125,7 +121,7 @@ int main(void)
         glActiveTexture(GL_TEXTURE0 + 2);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
 
-        // window.swapBuffers();
+        //window.swapBuffers();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Calculate lightning and display on screen.
@@ -157,5 +153,6 @@ int main(void)
     fboHandler.deleteFBO(fbo2);
     
     glfwTerminate();
+    
     return 0;
 }

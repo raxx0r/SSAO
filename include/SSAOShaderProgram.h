@@ -16,7 +16,6 @@ class SSAOShaderProgram : public BaseShaderProgram {
 
   private:
     GLuint vbo[3];
-    FBOstruct* fbo;
 };
 
 #endif // SSAO_SHADER_PROGRAM_H

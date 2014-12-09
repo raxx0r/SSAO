@@ -16,7 +16,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class BaseShaderProgram {
-
   public:
     BaseShaderProgram(Shader* vert, Shader* frag);
     virtual ~BaseShaderProgram();
@@ -25,15 +24,13 @@ class BaseShaderProgram {
     virtual void initBuffers(std::vector<Model*> *vec) = 0;
     virtual void initLightSource(const LightSource* lightSource) {};
     virtual void use();
-
+    
     void bindFragDataLocation(GLint colorAttachment, std::string name);
     void attachShader(Shader* shader);
     void link();
     
-    
     GLuint getProgramID();
     GLint getUniformLoc(std::string name);
-
   protected:
     enum attribLocations {
         POSITION_LOC,

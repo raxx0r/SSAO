@@ -13,7 +13,6 @@ class DeferredShaderProgram : public BaseShaderProgram {
     void use();
     void initUniforms();
     void initBuffers(std::vector<Model*> *models = nullptr);
-
   private:
     enum vboIndices {
         POSITION_VBO,

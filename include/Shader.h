@@ -15,7 +15,6 @@ public:
     GLuint getShaderID();
     Shader(std::string path, GLenum type);
     virtual ~Shader();
-    
 };
 
 #endif // SHADER_H
