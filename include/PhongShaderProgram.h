@@ -9,37 +9,23 @@ class PhongShaderProgram : public BaseShaderProgram {
     PhongShaderProgram(Shader* vert, Shader* frag) : BaseShaderProgram(vert, frag) {};
     ~PhongShaderProgram();
     
-    void update(glm::mat4 modelMat, glm::mat4 viewMat);
+    void update(glm::mat4 viewMat);
     void use();
     void initUniforms();
     void initBuffers(std::vector<Model*> *models = nullptr);
     void initLightSource(const LightSource* lightSource);     
 
   private:
-    enum vboIndices {
-        POSITION_VBO,
-        NORMAL_VBO
-    };
     
-    GLuint vbo[2];
+    GLuint vbo[3];
     
-    // Buffer offset
-    long offset;
-    
-    // Perspective matrix
-    glm::mat4 P;
-
-    // View matrix
-    glm::mat4 V;
-
     // Inverted view matrix, used for specular highlights.
     glm::mat4 vInv;
+    
+    glm::mat4 V;
 
-    // Model matrix
-    glm::mat4 M;
+    glm::vec4 lightDirection;
 
-    // Normal matrix
-    glm::mat3 N;
 };
 
 #endif // PHONG_SHADER_PROGRAM_H

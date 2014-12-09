@@ -12,7 +12,7 @@ LDFLAGS = `pkg-config --libs glfw3` -lGL -lGLU -lX11 -lXxf86vm -lpthread\
 		  -lXrandr -lXi `pkg-config --libs assimp`
 else
 LDFLAGS = `pkg-config --libs glfw3` -lglfw3 -framework OpenGL -framework Cocoa \
-		  `pkg-config --libs assimp` 
+		  `pkg-config --libs assimp` -L/usr/local/Cellar/devil/1.7.8_1/lib/ -lIL
 endif
 
 SRCS = $(wildcard src/*.cpp)

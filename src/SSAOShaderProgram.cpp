@@ -23,9 +23,8 @@ void SSAOShaderProgram::use() {
     // Don't draw triangles with faces away from camera.
     glDisable(GL_CULL_FACE);
     
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fbo->tex);
-    glUniform1i(getUniformLoc("tex"), 0);
+    glUniform1i(getUniformLoc("normal_tex"), 1);
+    glUniform1i(getUniformLoc("position_tex"), 2);
 }
 
 // Init buffers for rendering. 
