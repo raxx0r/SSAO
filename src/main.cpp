@@ -11,8 +11,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <IL/il.h>
 
-
-
 enum WindowSize {
     WIDTH = 800,
     HEIGHT = 600
