@@ -6,7 +6,7 @@
 
 class SSAOShaderProgram : public BaseShaderProgram {
   public:
-    SSAOShaderProgram(Shader* vert, Shader* frag,  FBOstruct* fbo1) : BaseShaderProgram(vert, frag), fbo(fbo1) { };
+    SSAOShaderProgram(Shader* vert, Shader* frag) : BaseShaderProgram(vert, frag) { };
     ~SSAOShaderProgram();
     
     void update();

@@ -11,21 +11,22 @@
 /// Container struct for fbos. 
 typedef struct FBOstruct {
 	GLuint index;
-	GLuint rb;
-	GLuint tex;
+	GLuint depth;
+	GLuint texids[3];  // Original, Normals, Textures
 	GLint width;
 	GLint height;
 } FBOstruct;
 
 class FboHandler {
   public:
-  	FboHandler();
-  	void initFBO(FBOstruct& fbo, GLint width, GLint height);
+    FboHandler();
+    void initFBO(FBOstruct& fbo, GLint width, GLint height);
+    void initFBO2(FBOstruct& fbo, GLint width, GLint height);
     void useFBO(GLuint fboindex);
-  	virtual ~FboHandler();
+    void deleteFBO(FBOstruct& fbo); 
+    virtual ~FboHandler();
 
   private:
-  	void setupRenderTexture(FBOstruct& fbo);
   	bool checkFramebufferStatus();
 };
 

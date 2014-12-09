@@ -6,12 +6,10 @@ BaseShaderProgram::BaseShaderProgram(Shader* vert, Shader* frag) {
     // Attach two shaders and links them together to create a ShaderProgram
     attachShader(vert); 
     attachShader(frag);
-    bindFragDataLocation(0, "out_color");
     link();
     
     // Initialize vao
     glGenVertexArrays(1, &vao);
-    use();
 }
     
 void BaseShaderProgram::bindFragDataLocation(GLint colorAttachment, std::string name) {
