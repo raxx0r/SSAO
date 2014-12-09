@@ -26,6 +26,11 @@ void main() {
 	vec3 specular;
 	vec3 diffuse;
 
+	vec3 ambient = vec3(1.0);
+	float Ka = 0.5,
+		  Kd = 0.0,
+		  Ks = 0.0;
+
 	// Gradual loss of intensity.
 	float attenuation; 
 
@@ -36,9 +41,10 @@ void main() {
 	vec3 mv_normal = texture(normal_tex, tex_coords).xyz;
 
 	vec4 mv_position = texture(position_tex, tex_coords);
+
 	vec4 m_position = V_inv * mv_position;
 
-	vec4 ssao_component = texture(ssao_tex, tex_coords);
+	float ssao_component = texture(ssao_tex, tex_coords).r;
 
 	vec4 v_light_position = light_pos;
 
@@ -74,5 +80,5 @@ void main() {
 		specular = attenuation * light_col * pow(max(0.0, dot(normalize(reflect(-v_light_direction, mv_normal)), v_view_direction)), 20.0f);
 	}
 
-	out_color = vec4(diffuse + specular, 1.0);
+	out_color = vec4(Ka * (ambient - ssao_component) + Kd * diffuse + Ks * specular, 1.0);
 }

@@ -57,20 +57,12 @@ void FboHandler::initFBO2(FBOstruct& fbo, GLint width, GLint height) {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo.index);
 	glGenTextures(3, fbo.texids);
 
-	// Setup texture that stores normals.
+	// Setup texture that stores occlusion.
 	glBindTexture(GL_TEXTURE_2D, fbo.texids[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fbo.texids[0], 0);
-
-	// Setup depthbuffer.
-	glGenRenderbuffers(1, &fbo.depth);
-	glBindRenderbuffer(GL_RENDERBUFFER, fbo.depth);
-
-	// Attach renderbuffer to framebuffer
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbo.width, fbo.height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbo.depth);
 
 	GLenum drawbuffers[1] = {GL_COLOR_ATTACHMENT0};
 	glDrawBuffers(1, drawbuffers);

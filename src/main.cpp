@@ -4,10 +4,13 @@
 #include "PhongShaderProgram.h"
 #include "DeferredShaderProgram.h"
 #include "SSAOShaderProgram.h"
+#include "TextureUtils.h"
 
 #include <stdio.h>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include <IL/il.h>
 
 enum WindowSize {
     WIDTH = 800,
@@ -19,6 +22,9 @@ int main(void)
     // Initalize window and camera
     Window window = Window(WIDTH, HEIGHT, "Screen Space Ambient Occlusion");
     Camera camera = Camera();
+
+    ilInit();
+    GLuint rndNormalsText = TextureUtils::createTexture("textures/normals.jpg");
 
     // Initalize FBO:s
     FBOstruct fbo1, fbo2;
@@ -88,7 +94,7 @@ int main(void)
         fboHandler.useFBO(fbo1.index);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
-	
+
     	// Set movement of teapot
         M = glm::translate(glm::mat4(), glm::vec3(15.0, 0.0, 0.0));
         M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
@@ -120,8 +126,6 @@ int main(void)
 
         glActiveTexture(GL_TEXTURE0 + 2);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
-
-        //window.swapBuffers();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Calculate lightning and display on screen.
