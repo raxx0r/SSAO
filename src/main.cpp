@@ -75,9 +75,11 @@ int main(void)
     Model* bunny = new Model("models/bunny.obj");
     Model* armadillo = new Model("models/armadillo.obj");
     Model* porshe = new Model("models/porshe.obj");
+    Model* plane = new Model("models/plane.obj");
     models.push_back(bunny);
     models.push_back(armadillo);
     models.push_back(porshe);
+    models.push_back(plane);
     
     // Setup VAO, VBO and Uniforms.
     deferredProgram.initBuffers(&models);
@@ -112,6 +114,11 @@ int main(void)
 	M = glm::translate(M, glm::vec3(0.0, 0.5, -1.0));
 	M = glm::rotate(M, Utils::degToRad(220.0), glm::vec3(0.0, 1.0, 0.0));
 	porshe->setModelmatrix(M);
+	
+	// Set movement of plane
+	M = glm::scale(glm::mat4(1.0f),glm::vec3(8.0f));
+	M = glm::translate(M, glm::vec3(2.0, -1.3, 0.0));
+	plane->setModelmatrix(M);
 	
     	// Draw each object 
     	V = camera.getMatrix();

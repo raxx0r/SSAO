@@ -71,7 +71,7 @@ void main() {
 	}
 
 	diffuse = attenuation * light_col * max(0.0, dot(mv_normal, v_light_direction));
-
+	
 	// Specular == 0 if light comes from wrong direction.
 	if (dot(mv_normal, v_light_direction) < 0.0) {
 		specular = vec3(0.0);
