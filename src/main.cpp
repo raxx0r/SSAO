@@ -22,7 +22,8 @@ int main(void)
     // Initalize window and camera
     Window window = Window(WIDTH, HEIGHT, "Screen Space Ambient Occlusion");
     Camera camera = Camera();
-
+    
+    // Create texture
     ilInit();
     GLuint rndNormalsText = TextureUtils::createTexture("textures/normals.jpg");
 
@@ -72,11 +73,13 @@ int main(void)
     // Load all models and store in vector
     std::vector<Model*> models;
     Model* teapot = new Model("models/teapot.obj");
-    Model* teapot2 = new Model("models/teapot.obj");
     Model* sphere = new Model("models/sphere.obj");
+    Model* porshe = new Model("models/porshe.obj");
+    Model* bunny = new Model("models/bunny.obj");
     models.push_back(teapot);
-    models.push_back(teapot2);
     models.push_back(sphere);
+    models.push_back(porshe);
+    models.push_back(bunny);
     
     // Setup VAO, VBO and Uniforms.
     deferredProgram.initBuffers(&models);
@@ -96,19 +99,26 @@ int main(void)
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
 
     	// Set movement of teapot
-        M = glm::translate(glm::mat4(), glm::vec3(15.0, 0.0, 0.0));
+        M = glm::translate(glm::mat4(), glm::vec3(10.0, -1.0, 0.0));
         M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
         teapot->setModelmatrix(M);
-	
-	// Set movement of teapot2
-        M = glm::translate(glm::mat4(), glm::vec3(-15.0, 0.0, 0.0));
-        M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
-        teapot2->setModelmatrix(M);
         
 	// Set movement of sphere
-        M = glm::translate(glm::mat4(), glm::vec3(0.0, 5.0, 5.0));
+	M = glm::scale(glm::mat4(1.0f),glm::vec3(3.0f));
+        M = glm::translate(M, glm::vec3(-4.0, 2.0, 0.0));
     	sphere->setModelmatrix(M);
-
+	
+	// Set movement of porshe
+	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
+	M = glm::translate(M, glm::vec3(-4.5, 0.5, 0.0));
+	M = glm::rotate(M, Utils::degToRad(-90), glm::vec3(0.0, 1.0, 0.0));
+	porshe->setModelmatrix(M);
+	
+	// Set movement of bunny
+	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
+	M = glm::translate(M, glm::vec3(6.0, 0.0, 0.0));
+	bunny->setModelmatrix(M);
+	
     	// Draw each object 
     	V = camera.getMatrix();
     	for (auto &m : models) {
