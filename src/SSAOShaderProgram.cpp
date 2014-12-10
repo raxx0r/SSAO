@@ -14,7 +14,7 @@ void SSAOShaderProgram::initUniforms() {
 
     glBindVertexArray(vao);
 
-    const int kSamples = 15;
+    const int kSamples = 60;
     GLfloat kernel[3 * kSamples];
     generateRandomKernel(kernel, kSamples);
 

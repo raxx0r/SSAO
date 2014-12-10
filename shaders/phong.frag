@@ -28,8 +28,8 @@ void main() {
 
 	vec3 ambient = vec3(1.0);
 	float Ka = 0.5,
-		  Kd = 0.0,
-		  Ks = 0.0;
+		  Kd = 0.3,
+		  Ks = 0.2;
 
 	// Gradual loss of intensity.
 	float attenuation; 
@@ -80,5 +80,5 @@ void main() {
 		specular = attenuation * light_col * pow(max(0.0, dot(normalize(reflect(-v_light_direction, mv_normal)), v_view_direction)), 20.0f);
 	}
 
-	out_color = vec4(Ka * (ambient - ssao_component) + Kd * diffuse + Ks * specular, 1.0);
+	out_color = vec4(Ka * ambient * ssao_component + Kd * diffuse + Ks * specular, 1.0);
 }

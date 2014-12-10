@@ -1,6 +1,4 @@
 #include "TextureUtils.h"
-#include <IL/il.h>
-#include <iostream>
  
 GLuint TextureUtils::createTexture(const GLchar *path){
     ILuint image = ilGenImage();
