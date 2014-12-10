@@ -72,14 +72,12 @@ int main(void)
 
     // Load all models and store in vector
     std::vector<Model*> models;
-    Model* teapot = new Model("models/teapot.obj");
-    Model* sphere = new Model("models/sphere.obj");
-    Model* porshe = new Model("models/porshe.obj");
     Model* bunny = new Model("models/bunny.obj");
-    models.push_back(teapot);
-    models.push_back(sphere);
-    models.push_back(porshe);
+    Model* armadillo = new Model("models/armadillo.obj");
+    Model* porshe = new Model("models/porshe.obj");
     models.push_back(bunny);
+    models.push_back(armadillo);
+    models.push_back(porshe);
     
     // Setup VAO, VBO and Uniforms.
     deferredProgram.initBuffers(&models);
@@ -97,27 +95,23 @@ int main(void)
         fboHandler.useFBO(fbo1.index);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
-
-    	// Set movement of teapot
-        M = glm::translate(glm::mat4(), glm::vec3(10.0, -1.0, 0.0));
-        M = glm::rotate(M, Utils::degToRad(-90.0), glm::vec3(0.0, 1.0, 0.0));
-        teapot->setModelmatrix(M);
-        
-	// Set movement of sphere
-	M = glm::scale(glm::mat4(1.0f),glm::vec3(3.0f));
-        M = glm::translate(M, glm::vec3(-4.0, 2.0, 0.0));
-    	sphere->setModelmatrix(M);
-	
-	// Set movement of porshe
-	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
-	M = glm::translate(M, glm::vec3(-4.5, 0.5, 0.0));
-	M = glm::rotate(M, Utils::degToRad(-90), glm::vec3(0.0, 1.0, 0.0));
-	porshe->setModelmatrix(M);
 	
 	// Set movement of bunny
 	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
 	M = glm::translate(M, glm::vec3(6.0, 0.0, 0.0));
 	bunny->setModelmatrix(M);
+	
+	// Set movement of armadillo
+	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
+	M = glm::translate(M, glm::vec3(-5.0, 1.0, 0.0));
+	M = glm::rotate(M, Utils::degToRad(180.0), glm::vec3(0.0, 1.0, 0.0));
+	armadillo->setModelmatrix(M);
+	
+	// Set movement of porshe
+	M = glm::scale(glm::mat4(1.0f),glm::vec3(8.0f));
+	M = glm::translate(M, glm::vec3(0.0, 0.5, -1.0));
+	M = glm::rotate(M, Utils::degToRad(220.0), glm::vec3(0.0, 1.0, 0.0));
+	porshe->setModelmatrix(M);
 	
     	// Draw each object 
     	V = camera.getMatrix();
