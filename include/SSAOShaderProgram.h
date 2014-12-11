@@ -13,9 +13,12 @@ class SSAOShaderProgram : public BaseShaderProgram {
     void use();
     void initUniforms();
     void initBuffers(std::vector<Model*> *models = nullptr); 
+    void generateRandomKernel(GLfloat* kernel, const int kSamples);
+
 
   private:
     GLuint vbo[3];
+    float getRnd();
 };
 
 #endif // SSAO_SHADER_PROGRAM_H

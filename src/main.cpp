@@ -74,11 +74,10 @@ int main(void)
     std::vector<Model*> models;
     Model* bunny = new Model("models/bunny.obj");
     Model* armadillo = new Model("models/armadillo.obj");
-    Model* porshe = new Model("models/porshe.obj");
     Model* plane = new Model("models/plane.obj");
+    
     models.push_back(bunny);
     models.push_back(armadillo);
-    models.push_back(porshe);
     models.push_back(plane);
     
     // Setup VAO, VBO and Uniforms.
@@ -98,22 +97,16 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
 	
-	// Set movement of bunny
-	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
-	M = glm::translate(M, glm::vec3(6.0, 0.0, 0.0));
-	bunny->setModelmatrix(M);
-	
-	// Set movement of armadillo
-	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
-	M = glm::translate(M, glm::vec3(-5.0, 1.0, 0.0));
-	M = glm::rotate(M, Utils::degToRad(180.0), glm::vec3(0.0, 1.0, 0.0));
-	armadillo->setModelmatrix(M);
-	
-	// Set movement of porshe
-	M = glm::scale(glm::mat4(1.0f),glm::vec3(8.0f));
-	M = glm::translate(M, glm::vec3(0.0, 0.5, -1.0));
-	M = glm::rotate(M, Utils::degToRad(220.0), glm::vec3(0.0, 1.0, 0.0));
-	porshe->setModelmatrix(M);
+    	// Set movement of bunny
+    	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
+    	M = glm::translate(M, glm::vec3(3.0, 0.0, 0.0));
+    	bunny->setModelmatrix(M);
+    	
+    	// Set movement of armadillo
+    	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
+    	M = glm::translate(M, glm::vec3(-2.5, 1.0, 0.0));
+    	M = glm::rotate(M, Utils::degToRad(180.0), glm::vec3(0.0, 1.0, 0.0));
+    	armadillo->setModelmatrix(M);
 	
 	// Set movement of plane
 	M = glm::scale(glm::mat4(1.0f),glm::vec3(8.0f));
@@ -137,6 +130,10 @@ int main(void)
 
         glActiveTexture(GL_TEXTURE0 + 2);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
+
+        glActiveTexture(GL_TEXTURE0 + 3);
+        glBindTexture(GL_TEXTURE_2D, rndNormalsText);
+
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Calculate lightning and display on screen.

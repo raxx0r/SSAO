@@ -3,8 +3,6 @@
 
 #include <IL/il.h>
 #include <iostream>
-
-
 #include <GLFW/glfw3.h>
 
  
