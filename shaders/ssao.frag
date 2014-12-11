@@ -63,5 +63,5 @@ void main() {
 	occlusion = 1.0 - (occlusion / kernel.length());
 
 	// Increase exponent to exaggerate AO effect.
-	ssao_component = pow(occlusion, 2);
+	ssao_component = pow(occlusion, 2.0);
 }
