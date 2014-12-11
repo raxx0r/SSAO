@@ -15,7 +15,7 @@ void main() {
 	vec2 u_noise_scale = vec2(800.0, 600.0) / 32.0;
 
 	// TODO: Should be an user controlled uniform.
-	float u_radius = 0.5;
+	float u_radius = 1.0;
 
 	vec4 pos = texture(position_tex, tex_coords);
 	vec3 n = texture(normal_tex, tex_coords).rgb;
@@ -45,6 +45,8 @@ void main() {
 		float range_check = abs(pos.z - sample_depth) < u_radius ? 1.0 : 0.0;
 		occlusion += (sample_depth >= sample.z ? 1.0 : 0.0) * range_check;
 	}
-
+	
+	
+	
 	ssao_component = 1.0 - (occlusion / kernel.length());
 }

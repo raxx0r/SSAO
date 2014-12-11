@@ -9,8 +9,9 @@
 #include <stdio.h>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
-
 #include <IL/il.h>
+
+#define GL_GLEXT_PROTOTYPES
 
 enum WindowSize {
     WIDTH = 800,
@@ -75,10 +76,12 @@ int main(void)
     Model* bunny = new Model("models/bunny.obj");
     Model* armadillo = new Model("models/armadillo.obj");
     Model* plane = new Model("models/plane.obj");
+    Model* tea = new Model("models/teapot.obj");
     
     models.push_back(bunny);
     models.push_back(armadillo);
     models.push_back(plane);
+    models.push_back(tea);
     
     // Setup VAO, VBO and Uniforms.
     deferredProgram.initBuffers(&models);
@@ -91,9 +94,11 @@ int main(void)
 
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
+    glUniform1i(phongProgram.getUniformLoc("ssao_onoff"), 0);
     while (!window.isClosed()) {
         deferredProgram.use();
         fboHandler.useFBO(fbo1.index);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
 	
@@ -153,7 +158,7 @@ int main(void)
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         window.update();
-        camera.update(window);
+        camera.update(window, &phongProgram);
     }
 
     // Cleanup

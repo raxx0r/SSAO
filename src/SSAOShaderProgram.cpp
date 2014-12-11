@@ -20,8 +20,8 @@ void SSAOShaderProgram::initUniforms() {
 
     glUniform3fv(getUniformLoc("kernel"), kSamples, kernel);
 
-    // for (int i = 0; i < kSamples * 3; ++i) {
-    //     printf("%f\n", kernel[i]);
+    // for (int i = 0; i < kSamples * 3; i += 3) {
+    //     printf("%f %f %f\n", kernel[i], kernel[i + 1], kernel[i + 2]);
     // }
 
     // TODO: Put P in BaseShaderProgram.h so we won't have to do this here AND in DeferredShaderProgram.cpp
