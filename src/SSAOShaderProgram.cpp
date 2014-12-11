@@ -20,9 +20,9 @@ void SSAOShaderProgram::initUniforms() {
 
     glUniform3fv(getUniformLoc("kernel"), kSamples, kernel);
 
-    for (int i = 0; i < kSamples * 3; ++i) {
-        printf("%f\n", kernel[i]);
-    }
+    // for (int i = 0; i < kSamples * 3; ++i) {
+    //     printf("%f\n", kernel[i]);
+    // }
 
     // TODO: Put P in BaseShaderProgram.h so we won't have to do this here AND in DeferredShaderProgram.cpp
     float aspect = (float) 800 / 600;

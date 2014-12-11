@@ -27,9 +27,9 @@ void main() {
 	vec3 diffuse;
 
 	vec3 ambient = vec3(1.0);
-	float Ka = 0.5,
-		  Kd = 0.3,
-		  Ks = 0.2;
+	float Ka = 1.0,
+		  Kd = 0.0,
+		  Ks = 0.0;
 
 	// Gradual loss of intensity.
 	float attenuation; 
@@ -71,7 +71,7 @@ void main() {
 	}
 
 	diffuse = attenuation * light_col * max(0.0, dot(mv_normal, v_light_direction));
-
+	
 	// Specular == 0 if light comes from wrong direction.
 	if (dot(mv_normal, v_light_direction) < 0.0) {
 		specular = vec3(0.0);
