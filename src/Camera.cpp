@@ -47,9 +47,7 @@ glm::mat4 Camera::getMatrix(){
 }
 
 // Camera update function
-void Camera::update(Window& window){
-    // Calculate delaTime
-
+void Camera::update(Window& window, PhongShaderProgram* phongProgram){
     glfwPollEvents();
     
     GLFWwindow* glfwWindow = window.getWindow();
@@ -63,6 +61,12 @@ void Camera::update(Window& window){
     }          
     
     // Calculate the new position if specified key is pressed
+    if(glfwGetKey(window.getWindow(), GLFW_KEY_I)){
+	glUniform1i(phongProgram->getUniformLoc("ssao_onoff"), 1);
+    }
+    if(glfwGetKey(window.getWindow(), GLFW_KEY_O)){
+	glUniform1i(phongProgram->getUniformLoc("ssao_onoff"), 0);
+    }
     if(glfwGetKey(glfwWindow, GLFW_KEY_A)){
         _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(90.0f)) * deltaTime;
         _position.z -= _moveSpeed * cosf(_rotation.y + Utils::degToRad(90.0f)) * deltaTime;
