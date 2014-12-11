@@ -25,8 +25,6 @@ Window::Window(GLint width, GLint height, std::string s){
     // Make the window's context current.
     glfwMakeContextCurrent(window);
 
-    _frames = 0;
-    _fpsTimeElapsed = glfwGetTime();
     _lastBufferSwapTime = 0;
     _grabbed = false;
 }
@@ -36,28 +34,29 @@ Window::~Window(){
 }
 
 void Window::updateFPSCounter(){
-    double currentTime = glfwGetTime();
-    std::stringstream ss;
 
-    int type = 0;
-    if (type == 1) {
-        if ((currentTime - _fpsTimeElapsed) > 1.0) {
-            double fps; 
-            fps = _frames * 1.0 / (currentTime - _fpsTimeElapsed);
-            _fpsTimeElapsed = currentTime;
-            ss << "FPS: " << fps;
-            _frames = 0;
-            glfwSetWindowTitle(window, ss.str().c_str());
-        }
-    } 
-    else {
-        if (_frames % 60 == 0) {
-            ss << "FPS: " << round(1.0f / (currentTime - _fpsTimeElapsed));
-            glfwSetWindowTitle(window, ss.str().c_str());
-        }
-        _fpsTimeElapsed = currentTime;
+    static double t0 = 0.0;
+    static int frames = 0;
+    static double fps = 0.0;
+    static double frametime = 0.0;
+    static char titlestring[200];
+
+    double t;
+
+    // Get current time
+    t = glfwGetTime();  // Gets number of seconds since glfwInit()
+    // If one second has passed, or if this is the very first frame
+    if( (t-t0) > 1.0 || frames == 0 ) {
+        fps = (double)frames / (t-t0);
+        if(frames > 0) frametime = 1000.0 * (t-t0) / frames;
+        sprintf(titlestring, "SSAO, %.2f ms/frame (%.1f FPS)", frametime, fps);
+        glfwSetWindowTitle(window, titlestring);
+        t0 = t;
+        frames = 0;
     }
-    _frames++;
+    frames ++;
+    //return fps;
+
 }
 
 void Window::update(){
