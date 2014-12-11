@@ -27,8 +27,7 @@ private:
 	GLdouble _lastBufferSwapTime;
 	glm::vec2 _lastMousePos;
 	glm::vec2 _deltaMousePos;
-	double _fpsTimeElapsed;
-	int _frames;
+
 
 };
 
