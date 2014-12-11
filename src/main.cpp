@@ -117,7 +117,7 @@ int main(void)
 	
 	// Set movement of plane
 	M = glm::scale(glm::mat4(1.0f),glm::vec3(8.0f));
-	M = glm::translate(M, glm::vec3(2.0, -1.3, 0.0));
+	M = glm::translate(M, glm::vec3(4.0, 0.0, 0.0));
 	plane->setModelmatrix(M);
 	
     	// Draw each object 
