@@ -29,9 +29,9 @@ void main() {
 	vec3 diffuse;
 
 	vec3 ambient = vec3(1.0);
-	float Ka = 1.0,
-		  Kd = 0.0,
-		  Ks = 0.0;
+	float Ka = 0.5,
+		  Kd = 0.3,
+		  Ks = 0.2;
 
 	// Gradual loss of intensity.
 	float attenuation; 
