@@ -33,7 +33,7 @@ int main(void)
     FboHandler fboHandler = FboHandler();
     fboHandler.initFBO(fbo1, window.getFramebufferWidth(), window.getFramebufferHeight());
     fboHandler.initFBO2(fbo2, window.getFramebufferWidth(), window.getFramebufferHeight());
-    fboHandler.initFBO3(fbo3, window.getFramebufferWidth(), window.getFramebufferHeight());
+    fboHandler.initFBO2(fbo3, window.getFramebufferWidth(), window.getFramebufferHeight());
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
     // Create shaders
@@ -79,12 +79,12 @@ int main(void)
     std::vector<Model*> models;
     Model* bunny = new Model("models/bunny.obj");
     Model* armadillo = new Model("models/armadillo.obj");
-    // Model* plane = new Model("models/plane.obj");
+    Model* plane = new Model("models/plane.obj");
     Model* tea = new Model("models/teapot.obj");
     
     models.push_back(bunny);
     models.push_back(armadillo);
-    // models.push_back(plane);
+    models.push_back(plane);
     models.push_back(tea);
     
     // Setup VAO, VBO and Uniforms.
@@ -112,9 +112,9 @@ int main(void)
     	tea->setModelmatrix(M);
 	
     	// Set movement of plane
-    	// M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
-    	// M = glm::translate(M, glm::vec3(3.0, -0.1, 0.0));
-    	// plane->setModelmatrix(M);
+    	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
+    	M = glm::translate(M, glm::vec3(3.0, -0.1, 0.0));
+    	plane->setModelmatrix(M);
 	
     	// Set movement of bunny
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
@@ -137,7 +137,7 @@ int main(void)
         // Generate SSAO component
         ssaoProgram.use();
 
-        fboHandler.useFBO(fbo2.index);
+        fboHandler.useFBO(fbo3.index);
 
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
@@ -151,23 +151,9 @@ int main(void)
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Calculate lightning and display on screen.
-        phongProgram.use();
-        phongProgram.update(V);
-        fboHandler.useFBO(fbo3.index);
-        
-        glActiveTexture(GL_TEXTURE0 + 1);
-        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
-
-        glActiveTexture(GL_TEXTURE0 + 2);
-        glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
-
-        glActiveTexture(GL_TEXTURE0 + 3);
-        glBindTexture(GL_TEXTURE_2D, fbo2.texids[0]);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         blurProgram.use();
-        fboHandler.useFBO(0);
+        fboHandler.useFBO(fbo2.index);
         
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, fbo3.texids[0]);
@@ -177,6 +163,20 @@ int main(void)
 
         // glActiveTexture(GL_TEXTURE0 + 3);
         // glBindTexture(GL_TEXTURE_2D, fbo2.texids[0]);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        phongProgram.use();
+        phongProgram.update(V);
+        fboHandler.useFBO(0);
+        
+        glActiveTexture(GL_TEXTURE0 + 1);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
+
+        glActiveTexture(GL_TEXTURE0 + 2);
+        glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
+
+        glActiveTexture(GL_TEXTURE0 + 3);
+        glBindTexture(GL_TEXTURE_2D, fbo2.texids[0]);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
