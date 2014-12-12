@@ -35,26 +35,22 @@ int main(void)
     fboHandler.initFBO2(fbo2, window.getFramebufferWidth(), window.getFramebufferHeight());
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
-    // Create shaders for Deferred.
+    // Create shaders
     Shader* deferredVert = new Shader("shaders/deferred.vert", GL_VERTEX_SHADER);
+    Shader* passVert = new Shader("shaders/pass.vert", GL_VERTEX_SHADER);
+
     Shader* deferredFrag = new Shader("shaders/deferred.frag", GL_FRAGMENT_SHADER);
-
-    // Create shaders for Phong.
-    Shader* phongVert = new Shader("shaders/phong.vert", GL_VERTEX_SHADER);
     Shader* phongFrag = new Shader("shaders/phong.frag", GL_FRAGMENT_SHADER);
-
-    // Create shaders for SSAO.
-    Shader* ssaoVert = new Shader("shaders/ssao.vert", GL_VERTEX_SHADER);
     Shader* ssaoFrag = new Shader("shaders/ssao.frag", GL_FRAGMENT_SHADER);
 
     // Setup Phong program
-    PhongShaderProgram phongProgram(phongVert, phongFrag);
+    PhongShaderProgram phongProgram(passVert, phongFrag);
     phongProgram.use();
     phongProgram.initBuffers();
     phongProgram.initUniforms();
 
     // Setup SSAO program.
-    SSAOShaderProgram ssaoProgram(ssaoVert, ssaoFrag);
+    SSAOShaderProgram ssaoProgram(passVert, ssaoFrag);
     ssaoProgram.use();
     ssaoProgram.initBuffers();
     ssaoProgram.initUniforms();
@@ -66,10 +62,9 @@ int main(void)
     // Shader pointers not necessary anymore. 
     delete deferredVert;
     delete deferredFrag;
-    delete phongVert;
     delete phongFrag;
-    delete ssaoVert;
     delete ssaoFrag;
+    delete passVert;
 
     // Load all models and store in vector
     std::vector<Model*> models;
