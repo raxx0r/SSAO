@@ -79,12 +79,12 @@ int main(void)
     std::vector<Model*> models;
     Model* bunny = new Model("models/bunny.obj");
     Model* armadillo = new Model("models/armadillo.obj");
-    Model* plane = new Model("models/plane.obj");
+    // Model* plane = new Model("models/plane.obj");
     Model* tea = new Model("models/teapot.obj");
     
     models.push_back(bunny);
     models.push_back(armadillo);
-    models.push_back(plane);
+    // models.push_back(plane);
     models.push_back(tea);
     
     // Setup VAO, VBO and Uniforms.
@@ -106,15 +106,15 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
 	
-	// Set movement of teapot
+	   // Set movement of teapot
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
     	M = glm::translate(M, glm::vec3(0.0, 0.5, 0.0));
     	tea->setModelmatrix(M);
 	
-	// Set movement of plane
-    	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
-    	M = glm::translate(M, glm::vec3(3.0, -0.1, 0.0));
-    	plane->setModelmatrix(M);
+    	// Set movement of plane
+    	// M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
+    	// M = glm::translate(M, glm::vec3(3.0, -0.1, 0.0));
+    	// plane->setModelmatrix(M);
 	
     	// Set movement of bunny
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));

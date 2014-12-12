@@ -11,6 +11,8 @@ void main() {
 	float texel_size = 1.0 / 800.0;
 	vec4 result = vec4(0.0);
 	int count = 0;
+
+	// Change this for blur effect. Set blur_size = 0 for no blur.
 	int blur_size = 1;
 
 	for(int i = -blur_size; i < blur_size + 1; i++) {
