@@ -75,9 +75,13 @@ int main(void)
     std::vector<Model*> models;
     Model* bunny = new Model("models/bunny.obj");
     Model* armadillo = new Model("models/armadillo.obj");
+    Model* plane = new Model("models/plane.obj");
+    Model* tea = new Model("models/teapot.obj");
     
     models.push_back(bunny);
     models.push_back(armadillo);
+    models.push_back(plane);
+    models.push_back(tea);
     
     // Setup VAO, VBO and Uniforms.
     deferredProgram.initBuffers(&models);
@@ -90,13 +94,23 @@ int main(void)
 
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
-    glUniform1i(phongProgram.getUniformLoc("ssao_onoff"), 0);
+    glUniform1i(phongProgram.getUniformLoc("ssao_onoff"), 1);
     while (!window.isClosed()) {
         deferredProgram.use();
         fboHandler.useFBO(fbo1.index);
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     	glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
+	
+	// Set movement of bunny
+    	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
+    	M = glm::translate(M, glm::vec3(0.0, 0.5, 0.0));
+    	tea->setModelmatrix(M);
+	
+	// Set movement of bunny
+    	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
+    	M = glm::translate(M, glm::vec3(3.0, -0.5, 0.0));
+    	plane->setModelmatrix(M);
 	
     	// Set movement of bunny
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
@@ -108,9 +122,7 @@ int main(void)
     	M = glm::translate(M, glm::vec3(-2.5, 1.0, 0.0));
     	M = glm::rotate(M, Utils::degToRad(180.0), glm::vec3(0.0, 1.0, 0.0));
     	armadillo->setModelmatrix(M);
-	
-	
-	
+
     	// Draw each object 
     	V = camera.getMatrix();
     	for (auto &m : models) {
