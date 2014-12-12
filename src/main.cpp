@@ -75,13 +75,9 @@ int main(void)
     std::vector<Model*> models;
     Model* bunny = new Model("models/bunny.obj");
     Model* armadillo = new Model("models/armadillo.obj");
-    Model* plane = new Model("models/plane.obj");
-    Model* tea = new Model("models/teapot.obj");
     
     models.push_back(bunny);
     models.push_back(armadillo);
-    models.push_back(plane);
-    models.push_back(tea);
     
     // Setup VAO, VBO and Uniforms.
     deferredProgram.initBuffers(&models);
@@ -113,10 +109,7 @@ int main(void)
     	M = glm::rotate(M, Utils::degToRad(180.0), glm::vec3(0.0, 1.0, 0.0));
     	armadillo->setModelmatrix(M);
 	
-	// Set movement of plane
-	M = glm::scale(glm::mat4(1.0f),glm::vec3(8.0f));
-	M = glm::translate(M, glm::vec3(4.0, 0.0, 0.0));
-	plane->setModelmatrix(M);
+	
 	
     	// Draw each object 
     	V = camera.getMatrix();
