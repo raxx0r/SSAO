@@ -9,6 +9,7 @@
 class Model {
 	public:
 	  Model(const std::string& filePath);
+	  virtual ~Model();
 	  
 	  void setOffset(long offs);
 	  long getOffset();

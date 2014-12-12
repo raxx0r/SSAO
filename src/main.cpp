@@ -77,15 +77,15 @@ int main(void)
 
     // Load all models and store in vector
     std::vector<Model*> models;
-    Model* bunny = new Model("models/bunny.obj");
-    Model* armadillo = new Model("models/armadillo.obj");
-    Model* plane = new Model("models/plane.obj");
-    Model* tea = new Model("models/teapot.obj");
+    Model bunny = Model("models/bunny.obj");
+    Model armadillo = Model("models/armadillo.obj");
+    Model plane = Model("models/plane.obj");
+    Model tea = Model("models/teapot.obj");
     
-    models.push_back(bunny);
-    models.push_back(armadillo);
-    models.push_back(plane);
-    models.push_back(tea);
+    models.push_back(&bunny);
+    models.push_back(&armadillo);
+    models.push_back(&plane);
+    models.push_back(&tea);
     
     // Setup VAO, VBO and Uniforms.
     deferredProgram.initBuffers(&models);
@@ -109,23 +109,23 @@ int main(void)
 	   // Set movement of teapot
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
     	M = glm::translate(M, glm::vec3(0.0, 0.5, 0.0));
-    	tea->setModelmatrix(M);
+    	tea.setModelmatrix(M);
 	
     	// Set movement of plane
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
     	M = glm::translate(M, glm::vec3(3.0, -0.1, 0.0));
-    	plane->setModelmatrix(M);
+    	plane.setModelmatrix(M);
 	
     	// Set movement of bunny
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
     	M = glm::translate(M, glm::vec3(3.0, 0.0, 0.0));
-    	bunny->setModelmatrix(M);
+    	bunny.setModelmatrix(M);
     	
     	// Set movement of armadillo
     	M = glm::scale(glm::mat4(1.0f),glm::vec3(6.0f));
     	M = glm::translate(M, glm::vec3(-2.5, 1.0, 0.0));
     	M = glm::rotate(M, Utils::degToRad(180.0), glm::vec3(0.0, 1.0, 0.0));
-    	armadillo->setModelmatrix(M);
+    	armadillo.setModelmatrix(M);
 
     	// Draw each object 
     	V = camera.getMatrix();
@@ -150,21 +150,16 @@ int main(void)
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        // Calculate lightning and display on screen.
-
+        // Blur SSAO component
         blurProgram.use();
         fboHandler.useFBO(fbo2.index);
         
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, fbo3.texids[0]);
 
-        // glActiveTexture(GL_TEXTURE0 + 2);
-        // glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
-
-        // glActiveTexture(GL_TEXTURE0 + 3);
-        // glBindTexture(GL_TEXTURE_2D, fbo2.texids[0]);
-
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Calculate lightning and display on screen.
         phongProgram.use();
         phongProgram.update(V);
         fboHandler.useFBO(0);
@@ -183,14 +178,11 @@ int main(void)
         window.update();
         camera.update(window);
     }
-
-    // Cleanup
-    for (auto &m : models) {
-        delete m;
-    }
     
+    // Cleanup
     fboHandler.deleteFBO(fbo1);
     fboHandler.deleteFBO(fbo2);
+    fboHandler.deleteFBO(fbo3);
     
     glfwTerminate();
     

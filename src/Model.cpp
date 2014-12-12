@@ -8,6 +8,10 @@ Model::Model(const std::string& filePath) {
     // Create an instance of the Importer class
     Assimp::Importer importer;
 
+    // Set pointers to nullptr as default.
+    vertices = nullptr;
+    normals = nullptr;
+    
     // And have it read the given file with some example postprocessing
     // Usually - if speed is not the most important aspect for you - you'll 
     // propably to request more postprocessing than we do in this example.
@@ -30,6 +34,11 @@ Model::Model(const std::string& filePath) {
 
     // We're done. Everything will be cleaned up by the importer destructor
     processObject(scene);
+}
+
+Model::~Model() {
+    if(vertices != nullptr) delete vertices;
+    if(normals != nullptr) delete normals;
 }
 
 void Model::setOffset(long offs) {
