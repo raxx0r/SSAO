@@ -22,6 +22,7 @@ class FboHandler {
     FboHandler();
     void initFBO(FBOstruct& fbo, GLint width, GLint height);
     void initFBO2(FBOstruct& fbo, GLint width, GLint height);
+    void initFBO3(FBOstruct& fbo, GLint width, GLint height);
     void useFBO(GLuint fboindex);
     void deleteFBO(FBOstruct& fbo); 
     virtual ~FboHandler();

@@ -6,6 +6,10 @@ PhongShaderProgram::~PhongShaderProgram() {
     glDeleteBuffers(2, vbo);
 }
 
+void PhongShaderProgram::setSSAO(int ssao) {
+    ssao_ = ssao;
+}
+
 void PhongShaderProgram::use() {
     BaseShaderProgram::use();
 
@@ -24,6 +28,7 @@ void PhongShaderProgram::update(glm::mat4 viewMat){
     GLuint vInvLoc = getUniformLoc("V_inv");
     GLuint vLoc = getUniformLoc("V");
     GLuint lightPosLoc = getUniformLoc("light_pos");
+    GLuint ssaoLoc = getUniformLoc("ssao_onoff");
 
     vInv = glm::inverse(viewMat);
     V = viewMat;
@@ -33,6 +38,7 @@ void PhongShaderProgram::update(glm::mat4 viewMat){
     // Send data to GPU
     glUniformMatrix4fv(vInvLoc, 1, GL_FALSE, glm::value_ptr(vInv));
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(V));
+    glUniform1i(ssaoLoc, ssao_);
 
     glUniform4fv(lightPosLoc, 1, glm::value_ptr(Vlight));
 

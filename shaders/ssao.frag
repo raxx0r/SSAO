@@ -12,10 +12,10 @@ uniform sampler2D rnd_normal_tex;
 layout (location = 0) out float ssao_component;
 
 void main() {
-	vec2 u_noise_scale = vec2(800.0, 600.0) / 64.0;
+	vec2 u_noise_scale = vec2(800.0, 600.0) / 32.0;
 
 	// The radius of the hemisphere
-	float u_radius = 2.0;
+	float u_radius = 4.0;
 
 	// Get position
 	vec4 pos = texture(position_tex, tex_coords);
@@ -54,7 +54,7 @@ void main() {
 		occlusion += (1 / (1 + len)) * (sample_depth >= sample.z ? 1.0 : 0.0) * range_check;
 	}
 	
-	occlusion = 1.0 - (1.5 * occlusion / kernel.length());
+	occlusion = 1.0 - (3.5 * occlusion / kernel.length());
 
 	// Increase exponent to exaggerate AO effect.
 	ssao_component = occlusion;

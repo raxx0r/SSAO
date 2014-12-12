@@ -3,7 +3,7 @@
 #include "Utils.h"
 #include "PhongShaderProgram.h"
 #include "DeferredShaderProgram.h"
-#include "SSAOShaderProgram.h"
+#include "PassShaderProgram.h"
 #include "TextureUtils.h"
 
 #include <stdio.h>
@@ -29,10 +29,11 @@ int main(void)
     GLuint rndNormalsText = TextureUtils::createTexture("textures/normals.jpg");
 
     // Initalize FBO:s
-    FBOstruct fbo1, fbo2;
+    FBOstruct fbo1, fbo2, fbo3;
     FboHandler fboHandler = FboHandler();
     fboHandler.initFBO(fbo1, window.getFramebufferWidth(), window.getFramebufferHeight());
     fboHandler.initFBO2(fbo2, window.getFramebufferWidth(), window.getFramebufferHeight());
+    fboHandler.initFBO3(fbo3, window.getFramebufferWidth(), window.getFramebufferHeight());
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     
     // Create shaders
@@ -42,18 +43,25 @@ int main(void)
     Shader* deferredFrag = new Shader("shaders/deferred.frag", GL_FRAGMENT_SHADER);
     Shader* phongFrag = new Shader("shaders/phong.frag", GL_FRAGMENT_SHADER);
     Shader* ssaoFrag = new Shader("shaders/ssao.frag", GL_FRAGMENT_SHADER);
+    Shader* blurFrag = new Shader("shaders/blur.frag", GL_FRAGMENT_SHADER);
 
     // Setup Phong program
     PhongShaderProgram phongProgram(passVert, phongFrag);
     phongProgram.use();
     phongProgram.initBuffers();
     phongProgram.initUniforms();
+    camera.attachPhongProgram(&phongProgram);
 
     // Setup SSAO program.
-    SSAOShaderProgram ssaoProgram(passVert, ssaoFrag);
+    PassShaderProgram ssaoProgram(passVert, ssaoFrag);
     ssaoProgram.use();
     ssaoProgram.initBuffers();
     ssaoProgram.initUniforms();
+
+    PassShaderProgram blurProgram(passVert, blurFrag);
+    blurProgram.use();
+    blurProgram.initBuffers();
+    blurProgram.initUniforms();
 
     // Setup Deferred program.
     DeferredShaderProgram deferredProgram(deferredVert, deferredFrag);
@@ -62,6 +70,7 @@ int main(void)
     // Shader pointers not necessary anymore. 
     delete deferredVert;
     delete deferredFrag;
+    delete blurFrag;
     delete phongFrag;
     delete ssaoFrag;
     delete passVert;
@@ -89,7 +98,7 @@ int main(void)
 
 
     glm::mat4 M = glm::mat4(), V = glm::mat4();
-    glUniform1i(phongProgram.getUniformLoc("ssao_onoff"), 1);
+    glUniform1i(phongProgram.getUniformLoc("ssao_onoff"), 0);
     while (!window.isClosed()) {
         deferredProgram.use();
         fboHandler.useFBO(fbo1.index);
@@ -144,7 +153,7 @@ int main(void)
         // Calculate lightning and display on screen.
         phongProgram.use();
         phongProgram.update(V);
-        fboHandler.useFBO(0);
+        fboHandler.useFBO(fbo3.index);
         
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, fbo1.texids[0]);
@@ -157,8 +166,22 @@ int main(void)
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        blurProgram.use();
+        fboHandler.useFBO(0);
+        
+        glActiveTexture(GL_TEXTURE0 + 1);
+        glBindTexture(GL_TEXTURE_2D, fbo3.texids[0]);
+
+        // glActiveTexture(GL_TEXTURE0 + 2);
+        // glBindTexture(GL_TEXTURE_2D, fbo1.texids[1]);
+
+        // glActiveTexture(GL_TEXTURE0 + 3);
+        // glBindTexture(GL_TEXTURE_2D, fbo2.texids[0]);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         window.update();
-        camera.update(window, &phongProgram);
+        camera.update(window);
     }
 
     // Cleanup

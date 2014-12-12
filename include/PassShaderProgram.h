@@ -1,13 +1,13 @@
-#ifndef SSAO_SHADER_PROGRAM_H
-#define SSAO_SHADER_PROGRAM_H
+#ifndef PASS_SHADER_PROGRAM_H
+#define PASS_SHADER_PROGRAM_H
 
 #include "BaseShaderProgram.h"
 #include "FboHandler.h"
 
-class SSAOShaderProgram : public BaseShaderProgram {
+class PassShaderProgram : public BaseShaderProgram {
   public:
-    SSAOShaderProgram(Shader* vert, Shader* frag) : BaseShaderProgram(vert, frag) { };
-    ~SSAOShaderProgram();
+    PassShaderProgram(Shader* vert, Shader* frag) : BaseShaderProgram(vert, frag) { };
+    ~PassShaderProgram();
     
     void update();
     void use();
@@ -21,4 +21,4 @@ class SSAOShaderProgram : public BaseShaderProgram {
     float getRnd();
 };
 
-#endif // SSAO_SHADER_PROGRAM_H
+#endif // PASS_SHADER_PROGRAM_H
