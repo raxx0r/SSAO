@@ -23,11 +23,11 @@ Model::Model(const std::string& filePath) {
   
     // If the import failed, report it
     if (!scene) {
-	printf("Model import failed! - %s \n", importer.GetErrorString());
+    	printf("Model import failed! - %s \n", importer.GetErrorString());
 
-	// TODO: Should be changed, return nullptr or similar.
-	// Proper cleanup can be missed if program terminates here.
-	exit(EXIT_FAILURE);
+    	// TODO: Should be changed, return nullptr or similar.
+    	// Proper cleanup can be missed if program terminates here.
+    	exit(EXIT_FAILURE);
     }
 
     printf("Model import of %s succeded. \n", filePath.c_str());    

@@ -112,7 +112,7 @@ int main(void)
     	tea.setModelmatrix(M);
 	
     	// Set movement of plane
-    	M = glm::scale(glm::mat4(1.0f),glm::vec3(10.0f));
+    	M = glm::scale(glm::mat4(1.0f),glm::vec3(5.0f));
     	M = glm::translate(M, glm::vec3(3.0, -0.1, 0.0));
     	plane.setModelmatrix(M);
 	

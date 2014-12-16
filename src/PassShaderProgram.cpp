@@ -13,6 +13,7 @@ void PassShaderProgram::update() {
 void PassShaderProgram::initUniforms() {
 
     glBindVertexArray(vao);
+    srand(5);
 
     const int kSamples = 60;
     GLfloat kernel[3 * kSamples];
@@ -23,7 +24,6 @@ void PassShaderProgram::initUniforms() {
     // for (int i = 0; i < kSamples * 3; i += 3) {
     //     printf("%f %f %f\n", kernel[i], kernel[i + 1], kernel[i + 2]);
     // }
-
     // TODO: Put P in BaseShaderProgram.h so we won't have to do this here AND in DeferredShaderProgram.cpp
     float aspect = (float) 800 / 600;
     glm::mat4 P = glm::perspective(Utils::degToRad(60.0f), aspect, 0.1f, 200.0f);
@@ -39,6 +39,9 @@ void PassShaderProgram::generateRandomKernel(GLfloat* kernel, const int kSamples
         glm::vec3 vec(getRnd(), getRnd(), (getRnd() + 1) / 2.0);
         vec = glm::normalize(vec);
         vec *= (getRnd() + 1) / 2.0;
+        float scale = (float(i) / 3.0) / (float)kSamples;
+        scale = lerp(0.1, 1.0, scale * scale);
+        vec *= scale;
         
         kernel[i] = vec.x;
         kernel[i + 1] = vec.y;
@@ -47,6 +50,10 @@ void PassShaderProgram::generateRandomKernel(GLfloat* kernel, const int kSamples
 
     // TODO: Put more samples closer to the origin of the sphere. They should
     // not be uniformly distributed in the sphere.
+}
+
+float PassShaderProgram::lerp(float start, float end, float weight) {
+    return (1.0 - weight) * start + weight * end;
 }
 
 float PassShaderProgram::getRnd() {

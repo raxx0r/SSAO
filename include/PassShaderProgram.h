@@ -19,6 +19,7 @@ class PassShaderProgram : public BaseShaderProgram {
   private:
     GLuint vbo[3];
     float getRnd();
+    float lerp(float start, float end, float weight);
 };
 
 #endif // PASS_SHADER_PROGRAM_H

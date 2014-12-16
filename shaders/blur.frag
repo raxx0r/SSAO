@@ -17,8 +17,11 @@ void main() {
 
 	for(int i = -blur_size; i < blur_size + 1; i++) {
 		for(int j = -blur_size; j < blur_size + 1; j++) {
-			result += texture(normal_tex, tex_coords + vec2(i, j) * texel_size).r;
-			count++;
+			vec2 coords = tex_coords + vec2(i, j) * texel_size;
+			if (coords.x > 0.0 && coords.y > 0.0) {
+				result += texture(normal_tex, abs(coords)).r;
+				count++;
+			}
 		}
 	}
 	float color_out = count == 0 ? ssao_color : result / count;
