@@ -22,9 +22,7 @@ void DeferredShaderProgram::update(glm::mat4 modelMat, glm::mat4 viewMat){
     GLuint vLoc = getUniformLoc("V");
     GLuint nLoc = getUniformLoc("N");
 
-
     N = glm::transpose(glm::inverse(glm::mat3(viewMat * modelMat)));
-    
 
     // Send data to GPU
     glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(modelMat));

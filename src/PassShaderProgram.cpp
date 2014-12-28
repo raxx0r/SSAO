@@ -1,18 +1,19 @@
-#include "SSAOShaderProgram.h"
+#include "PassShaderProgram.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-SSAOShaderProgram::~SSAOShaderProgram() {
+PassShaderProgram::~PassShaderProgram() {
     glDeleteBuffers(3, vbo);
 }
 
-void SSAOShaderProgram::update() { 
+void PassShaderProgram::update() { 
     // TODO
 }
 
-void SSAOShaderProgram::initUniforms() {
+void PassShaderProgram::initUniforms() {
 
     glBindVertexArray(vao);
+    srand(3);
 
     const int kSamples = 60;
     GLfloat kernel[3 * kSamples];
@@ -23,7 +24,6 @@ void SSAOShaderProgram::initUniforms() {
     // for (int i = 0; i < kSamples * 3; i += 3) {
     //     printf("%f %f %f\n", kernel[i], kernel[i + 1], kernel[i + 2]);
     // }
-
     // TODO: Put P in BaseShaderProgram.h so we won't have to do this here AND in DeferredShaderProgram.cpp
     float aspect = (float) 800 / 600;
     glm::mat4 P = glm::perspective(Utils::degToRad(60.0f), aspect, 0.1f, 200.0f);
@@ -33,12 +33,15 @@ void SSAOShaderProgram::initUniforms() {
     glBindVertexArray(0);
 }
 
-void SSAOShaderProgram::generateRandomKernel(GLfloat* kernel, const int kSamples) {
+void PassShaderProgram::generateRandomKernel(GLfloat* kernel, const int kSamples) {
     
     for (int i = 0; i < 3 * kSamples; i += 3) {
-        glm::vec3 vec(getRnd(), getRnd(), (getRnd() + 1) / 2.0);
+        glm::vec3 vec(getRnd(), getRnd(), 0.1 + (getRnd() + 1) / 2.0);
         vec = glm::normalize(vec);
         vec *= (getRnd() + 1) / 2.0;
+        float scale = (float(i) / 3.0) / (float)kSamples;
+        scale = lerp(0.1, 1.0, scale * scale);
+        vec *= scale;
         
         kernel[i] = vec.x;
         kernel[i + 1] = vec.y;
@@ -49,11 +52,15 @@ void SSAOShaderProgram::generateRandomKernel(GLfloat* kernel, const int kSamples
     // not be uniformly distributed in the sphere.
 }
 
-float SSAOShaderProgram::getRnd() {
+float PassShaderProgram::lerp(float start, float end, float weight) {
+    return (1.0 - weight) * start + weight * end;
+}
+
+float PassShaderProgram::getRnd() {
     return (2.0 * (float)rand() / RAND_MAX) - 1.0;
 }
 
-void SSAOShaderProgram::use() {
+void PassShaderProgram::use() {
     BaseShaderProgram::use();
     glDisable(GL_DEPTH_TEST);
     
@@ -66,7 +73,7 @@ void SSAOShaderProgram::use() {
 }
 
 // Init buffers for rendering. 
-void SSAOShaderProgram::initBuffers(std::vector<Model*> *vec) {
+void PassShaderProgram::initBuffers(std::vector<Model*> *vec) {
 
     glBindVertexArray(vao);
 

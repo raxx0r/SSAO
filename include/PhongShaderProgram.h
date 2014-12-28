@@ -13,7 +13,8 @@ class PhongShaderProgram : public BaseShaderProgram {
     void use();
     void initUniforms();
     void initBuffers(std::vector<Model*> *models = nullptr);
-    void initLightSource(const LightSource* lightSource);     
+    void initLightSource(const LightSource* lightSource);  
+    void setSSAO(int ssao);   
 
   private:
     
@@ -25,6 +26,7 @@ class PhongShaderProgram : public BaseShaderProgram {
     glm::mat4 V;
 
     glm::vec4 lightDirection;
+    GLuint ssao_;
 
 };
 

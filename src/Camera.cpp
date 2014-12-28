@@ -18,6 +18,10 @@ void Camera::setPosition(glm::vec3 position){
     _position = position;
 }
 
+void Camera::attachPhongProgram(PhongShaderProgram* phongProgram) {
+    _phongProgram= phongProgram;
+}
+
 // Set camera roation
 void Camera::setRotation(glm::vec3 rotation){
     _rotation = rotation;
@@ -46,8 +50,9 @@ glm::mat4 Camera::getMatrix(){
     return matrix;
 }
 
+
 // Camera update function
-void Camera::update(Window& window, PhongShaderProgram* phongProgram){
+void Camera::update(Window& window){
     glfwPollEvents();
     
     GLFWwindow* glfwWindow = window.getWindow();
@@ -59,13 +64,13 @@ void Camera::update(Window& window, PhongShaderProgram* phongProgram){
         _rotation.y += deltaMousePosition.x * _rotateSpeed*deltaTime;
         _rotation.x += deltaMousePosition.y * _rotateSpeed*deltaTime;
     }          
-    
+
     // Calculate the new position if specified key is pressed
     if(glfwGetKey(window.getWindow(), GLFW_KEY_I)){
-	glUniform1i(phongProgram->getUniformLoc("ssao_onoff"), 1);
+	   _phongProgram->setSSAO(1);
     }
     if(glfwGetKey(window.getWindow(), GLFW_KEY_O)){
-	glUniform1i(phongProgram->getUniformLoc("ssao_onoff"), 0);
+	   _phongProgram->setSSAO(0);
     }
     if(glfwGetKey(glfwWindow, GLFW_KEY_A)){
         _position.x -= _moveSpeed * sinf(_rotation.y + Utils::degToRad(90.0f)) * deltaTime;

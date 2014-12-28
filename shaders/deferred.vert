@@ -9,13 +9,13 @@ uniform mat4 P;
 uniform mat3 N;
 
 out vec3 t_normal;
-out vec4 m_position;
+out vec4 mv_position;
 
 void main() {
-	t_normal =  N * normal;
-
-	// Position in model-space;
-	m_position = M * vec4(position, 1.0);
+	t_normal = N * normal;
 	
+	// Position in view-space;
+	mv_position = V * M * vec4(position, 1.0);
+
 	gl_Position = P * V * M * vec4(position, 1.0);
 }

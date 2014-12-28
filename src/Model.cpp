@@ -8,6 +8,10 @@ Model::Model(const std::string& filePath) {
     // Create an instance of the Importer class
     Assimp::Importer importer;
 
+    // Set pointers to nullptr as default.
+    vertices = nullptr;
+    normals = nullptr;
+    
     // And have it read the given file with some example postprocessing
     // Usually - if speed is not the most important aspect for you - you'll 
     // propably to request more postprocessing than we do in this example.
@@ -19,17 +23,22 @@ Model::Model(const std::string& filePath) {
   
     // If the import failed, report it
     if (!scene) {
-	printf("Model import failed! - %s \n", importer.GetErrorString());
+    	printf("Model import failed! - %s \n", importer.GetErrorString());
 
-	// TODO: Should be changed, return nullptr or similar.
-	// Proper cleanup can be missed if program terminates here.
-	exit(EXIT_FAILURE);
+    	// TODO: Should be changed, return nullptr or similar.
+    	// Proper cleanup can be missed if program terminates here.
+    	exit(EXIT_FAILURE);
     }
 
     printf("Model import of %s succeded. \n", filePath.c_str());    
 
     // We're done. Everything will be cleaned up by the importer destructor
     processObject(scene);
+}
+
+Model::~Model() {
+    if(vertices != nullptr) delete[] vertices;
+    if(normals != nullptr) delete[] normals;
 }
 
 void Model::setOffset(long offs) {

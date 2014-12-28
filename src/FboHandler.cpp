@@ -59,7 +59,7 @@ void FboHandler::initFBO2(FBOstruct& fbo, GLint width, GLint height) {
 
 	// Setup texture that stores occlusion.
 	glBindTexture(GL_TEXTURE_2D, fbo.texids[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fbo.texids[0], 0);
