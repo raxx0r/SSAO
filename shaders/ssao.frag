@@ -11,12 +11,12 @@ uniform sampler2D rnd_normal_tex;
 
 layout (location = 0) out float ssao_component;
 
-#if 1 // Set to 1 and blur_size@blur.frag to 0 if we want the "presentable" rendering.
+#if 0 // Set to 1 and blur_size@blur.frag to 0 if we want the "presentable" rendering.
 	float u_radius = 2.5;
 	float amplitude = 5.0;
 #else
-	float u_radius = 4.0;
-	float amplitude = 7.0;
+	float u_radius = 3.0;
+	float amplitude = 5.0;
 #endif
 
 void main() {
@@ -60,7 +60,5 @@ void main() {
 	}
 	
 	occlusion = max(1.0 - (amplitude * occlusion / kernel.length()), 0.0);
-
-	// Increase exponent to exaggerate AO effect.
 	ssao_component = occlusion;
 }

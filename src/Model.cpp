@@ -37,8 +37,8 @@ Model::Model(const std::string& filePath) {
 }
 
 Model::~Model() {
-    if(vertices != nullptr) delete vertices;
-    if(normals != nullptr) delete normals;
+    if(vertices != nullptr) delete[] vertices;
+    if(normals != nullptr) delete[] normals;
 }
 
 void Model::setOffset(long offs) {

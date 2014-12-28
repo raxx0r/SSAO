@@ -13,7 +13,7 @@ void PassShaderProgram::update() {
 void PassShaderProgram::initUniforms() {
 
     glBindVertexArray(vao);
-    srand(5);
+    srand(3);
 
     const int kSamples = 60;
     GLfloat kernel[3 * kSamples];
@@ -36,7 +36,7 @@ void PassShaderProgram::initUniforms() {
 void PassShaderProgram::generateRandomKernel(GLfloat* kernel, const int kSamples) {
     
     for (int i = 0; i < 3 * kSamples; i += 3) {
-        glm::vec3 vec(getRnd(), getRnd(), (getRnd() + 1) / 2.0);
+        glm::vec3 vec(getRnd(), getRnd(), 0.1 + (getRnd() + 1) / 2.0);
         vec = glm::normalize(vec);
         vec *= (getRnd() + 1) / 2.0;
         float scale = (float(i) / 3.0) / (float)kSamples;
